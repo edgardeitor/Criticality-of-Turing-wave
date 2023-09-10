@@ -1,5 +1,5 @@
 from IPython import get_ipython
-get_ipython().magic('reset -sf')
+get_ipython().run_line_magic('reset', '-sf')
 
 import os
 import shutil
@@ -371,26 +371,26 @@ for counter1 in range(nvar):
 
 phi11NF = Vector('phi11^NF')
 
-Q02NF = Vector('Q02^NF')
-Q22NF = Vector('Q22^NF')
-Q011NF = Vector('Q011^NF')
-Q211NF = Vector('Q211^NF')
+W02NF = Vector('W02^NF')
+W22NF = Vector('W22^NF')
+W011NF = Vector('W011^NF')
+W211NF = Vector('W211^NF')
 
 psi11NF = Vector('psi11^NF')
 
-Q13NF = Vector('Q13^NF')
-Q33NF = Vector('Q33^NF')
-Q121NF = Vector('Q121^NF')
-Q1221NF = Vector('Q1221^NF')
-Q321NF = Vector('Q321^NF')
+W13NF = Vector('W13^NF')
+W33NF = Vector('W33^NF')
+W121NF = Vector('W121^NF')
+W1221NF = Vector('W1221^NF')
+W321NF = Vector('W321^NF')
 
-Q04NF = Vector('Q04^NF')
-Q24NF = Vector('Q24^NF')
-Q031NF = Vector('Q031^NF')
-Q231NF = Vector('Q231^NF')
-Q2231NF = Vector('Q2231^NF')
-Q022NF = Vector('Q022^NF')
-Q222NF = Vector('Q222^NF')
+W04NF = Vector('W04^NF')
+W24NF = Vector('W24^NF')
+W031NF = Vector('W031^NF')
+W231NF = Vector('W231^NF')
+W2231NF = Vector('W2231^NF')
+W022NF = Vector('W022^NF')
+W222NF = Vector('W222^NF')
 
 getout = 0
 
@@ -442,36 +442,36 @@ DS_phi11phi11 = secondorderapplied(phi11NF, phi11NF)
 
 negativeRHS.actualcoord = DS_phi11conjphi11
 
-Q02NF = linearsolver(Q02NF, negativeRHS, coefmat00)
+W02NF = linearsolver(W02NF, negativeRHS, coefmat00)
 
 negativeRHS.actualcoord = DS_phi11phi11
 
-Q22NF = linearsolver(Q22NF, negativeRHS, coefmat22)
+W22NF = linearsolver(W22NF, negativeRHS, coefmat22)
 
 negativeRHS.actualcoord = Mul(2, DS_phi11phi11)
 
-Q011NF = linearsolver(Q011NF, negativeRHS, coefmat02)
+W011NF = linearsolver(W011NF, negativeRHS, coefmat02)
 
 negativeRHS.actualcoord = Mul(2, DS_phi11conjphi11)
 
-Q211NF = linearsolver(Q211NF, negativeRHS, coefmat20)
+W211NF = linearsolver(W211NF, negativeRHS, coefmat20)
 
-Q02NF_eval = evaluation_dict(Q02NF)
-Q22NF_eval = evaluation_dict(Q22NF)
-Q011NF_eval = evaluation_dict(Q011NF)
-Q211NF_eval = evaluation_dict(Q211NF)
+W02NF_eval = evaluation_dict(W02NF)
+W22NF_eval = evaluation_dict(W22NF)
+W011NF_eval = evaluation_dict(W011NF)
+W211NF_eval = evaluation_dict(W211NF)
         
 print('Second-order ready')
 
-DS_phi11Q02 = secondorderapplied(phi11NF, Q02NF)
-DS_conjphi11Q22 = secondorderapplied(phi11NF.conj, Q22NF)
+DS_phi11W02 = secondorderapplied(phi11NF, W02NF)
+DS_conjphi11W22 = secondorderapplied(phi11NF.conj, W22NF)
 
-DS_conjphi11Q011 = secondorderapplied(phi11NF.conj, Q011NF)
-DS_phi11Q211 = secondorderapplied(phi11NF, Q211NF)
+DS_conjphi11W011 = secondorderapplied(phi11NF.conj, W011NF)
+DS_phi11W211 = secondorderapplied(phi11NF, W211NF)
 
 TS_phi11phi11conjphi11 = thirdorderapplied(phi11NF, phi11NF, phi11NF.conj)
 
-Tcoefsubmatrix = matrix('Tdummysubmatrix', nvar-1, transpose(invertiblesubmatrix))
+Tcoefsubmatrix = matrix('Tdummysubmatrix', nvar - 1, transpose(invertiblesubmatrix))
 Tcoefmat11 = matrix('Tcoefmat', nvar, transpose(coefmat11.actualcoord))
 
 psi11NF = kernel_determination(psi11NF, Tcoefmat11, criticalrow, Tcoefsubmatrix, submatrixcols, submatrixrows)
@@ -480,11 +480,11 @@ psi11NF_eval = evaluation_dict(psi11NF)
 
 denominator = phi11NF.dummy.dot(psi11NF.dummy)
 
-C130 = Mul(Pow(denominator, -1), psi11NF.dummy.dot(Add(Mul(4, DS_phi11Q02), Mul(2, DS_conjphi11Q22),
+C130 = Mul(Pow(denominator, -1), psi11NF.dummy.dot(Add(Mul(4, DS_phi11W02), Mul(2, DS_conjphi11W22),
                                                        Mul(3, TS_phi11phi11conjphi11))))
 
 C112 = Mul(Pow(denominator, -1),
-           psi11NF.dummy.dot(Add(Mul(2, DS_conjphi11Q011), Mul(4, DS_phi11Q02), Mul(2, DS_phi11Q211),
+           psi11NF.dummy.dot(Add(Mul(2, DS_conjphi11W011), Mul(4, DS_phi11W02), Mul(2, DS_phi11W211),
                                  Mul(6, TS_phi11phi11conjphi11))))
     
 C130conj = conjugate(C130)
@@ -492,272 +492,272 @@ C130conj = conjugate(C130)
 C112conj = conjugate(C112)
 
 if fifthcoef=='y':
-    DS_phi11Q22 = secondorderapplied(phi11NF, Q22NF)
-    DS_phi11Q011 = secondorderapplied(phi11NF, Q011NF)
+    DS_phi11W22 = secondorderapplied(phi11NF, W22NF)
+    DS_phi11W011 = secondorderapplied(phi11NF, W011NF)
     
     TS_phi11phi11phi11 = thirdorderapplied(phi11NF, phi11NF, phi11NF)
     
-    negativeRHS.actualcoord = Add(Mul(-1, C130, phi11NF.dummy), Mul(4, DS_phi11Q02), Mul(2, DS_conjphi11Q22),
+    negativeRHS.actualcoord = Add(Mul(-1, C130, phi11NF.dummy), Mul(4, DS_phi11W02), Mul(2, DS_conjphi11W22),
                                   Mul(3, TS_phi11phi11conjphi11))
     
-    Q13NF = critical_linearsolver(Q13NF, negativeRHS, criticalcol, coefsubmatrix,
+    W13NF = critical_linearsolver(W13NF, negativeRHS, criticalcol, coefsubmatrix,
                                   submatrixrows, submatrixcols)
-                
+
     if orthogonal=='y':
         if phiunit=='y':
-            Q13NF.actualcoord = Add(Q13NF.actualcoord, Mul(-1, Q13NF.actualcoord.dot(phi11NF.conj.dummy),
+            W13NF.actualcoord = Add(W13NF.actualcoord, Mul(-1, W13NF.actualcoord.dot(phi11NF.conj.dummy),
                                                            phi11NF.dummy))
         else:
-            Q13NF.actualcoord = Add(Q13NF.actualcoord, Mul(-1, Q13NF.actualcoord.dot(phi11NF.conj.dummy),
+            W13NF.actualcoord = Add(W13NF.actualcoord, Mul(-1, W13NF.actualcoord.dot(phi11NF.conj.dummy),
                                                            Pow(phi11NF.dummy.dot(phi11NF.conj.dummy), -1),
                                                            phi11NF.dummy))
     
-    negativeRHS.actualcoord = Add(Mul(-1, C112, phi11NF.dummy), Mul(2, DS_conjphi11Q011), Mul(4, DS_phi11Q02),
-                                  Mul(2, DS_phi11Q211), Mul(6, TS_phi11phi11conjphi11))
+    negativeRHS.actualcoord = Add(Mul(-1, C112, phi11NF.dummy), Mul(2, DS_conjphi11W011), Mul(4, DS_phi11W02),
+                                  Mul(2, DS_phi11W211), Mul(6, TS_phi11phi11conjphi11))
     
-    Q121NF = critical_linearsolver(Q121NF, negativeRHS, criticalcol, coefsubmatrix, submatrixrows, submatrixcols)
+    W121NF = critical_linearsolver(W121NF, negativeRHS, criticalcol, coefsubmatrix, submatrixrows, submatrixcols)
                 
     if orthogonal=='y':
         if phiunit=='y':
-            Q121NF.actualcoord = Add(Q121NF.actualcoord, Mul(-1, Q121NF.actualcoord.dot(phi11NF.conj.dummy),
+            W121NF.actualcoord = Add(W121NF.actualcoord, Mul(-1, W121NF.actualcoord.dot(phi11NF.conj.dummy),
                                                             phi11NF.dummy))
         else:
-            Q121NF.actualcoord = Add(Q121NF.actualcoord, Mul(-1, Q121NF.actualcoord.dot(phi11NF.conj.dummy),
+            W121NF.actualcoord = Add(W121NF.actualcoord, Mul(-1, W121NF.actualcoord.dot(phi11NF.conj.dummy),
                                                             Pow(phi11NF.dummy.dot(phi11NF.conj.dummy), -1),
                                                             phi11NF.dummy))
         
-    negativeRHS.actualcoord = Add(Mul(2, DS_phi11Q22), TS_phi11phi11phi11)
+    negativeRHS.actualcoord = Add(Mul(2, DS_phi11W22), TS_phi11phi11phi11)
     
-    Q33NF = linearsolver(Q33NF, negativeRHS, coefmat33)
+    W33NF = linearsolver(W33NF, negativeRHS, coefmat33)
     
-    negativeRHS.actualcoord = Add(Mul(2, DS_phi11Q22), Mul(2, DS_phi11Q011), Mul(3, TS_phi11phi11phi11))
+    negativeRHS.actualcoord = Add(Mul(2, DS_phi11W22), Mul(2, DS_phi11W011), Mul(3, TS_phi11phi11phi11))
     
-    Q1221NF = linearsolver(Q1221NF, negativeRHS, coefmat13)
+    W1221NF = linearsolver(W1221NF, negativeRHS, coefmat13)
     
-    negativeRHS.actualcoord = Add(Mul(2, DS_phi11Q211), Mul(2, DS_conjphi11Q22), Mul(3, TS_phi11phi11conjphi11))
+    negativeRHS.actualcoord = Add(Mul(2, DS_phi11W211), Mul(2, DS_conjphi11W22), Mul(3, TS_phi11phi11conjphi11))
     
-    Q321NF = linearsolver(Q321NF, negativeRHS, coefmat31)
+    W321NF = linearsolver(W321NF, negativeRHS, coefmat31)
     
-    Q13NF_eval = evaluation_dict(Q13NF)
-    Q121NF_eval = evaluation_dict(Q121NF)
-    Q33NF_eval = evaluation_dict(Q33NF)
-    Q1221NF_eval = evaluation_dict(Q1221NF)
-    Q321NF_eval = evaluation_dict(Q321NF)
+    W13NF_eval = evaluation_dict(W13NF)
+    W121NF_eval = evaluation_dict(W121NF)
+    W33NF_eval = evaluation_dict(W33NF)
+    W1221NF_eval = evaluation_dict(W1221NF)
+    W321NF_eval = evaluation_dict(W321NF)
     
     print('Third order ready')
     
-    DS_Q02Q02 = secondorderapplied(Q02NF, Q02NF)
-    DS_Q22conjQ22 = secondorderapplied(Q22NF, Q22NF.conj)
-    DS_phi11conjQ13 = secondorderapplied(phi11NF, Q13NF.conj)
+    DS_W02W02 = secondorderapplied(W02NF, W02NF)
+    DS_W22conjW22 = secondorderapplied(W22NF, W22NF.conj)
+    DS_phi11conjW13 = secondorderapplied(phi11NF, W13NF.conj)
     
-    DS_Q02Q22 = secondorderapplied(Q02NF, Q22NF)
-    DS_phi11Q13 = secondorderapplied(phi11NF, Q13NF)
-    DS_conjphi11Q33 = secondorderapplied(phi11NF.conj, Q33NF)
+    DS_W02W22 = secondorderapplied(W02NF, W22NF)
+    DS_phi11W13 = secondorderapplied(phi11NF, W13NF)
+    DS_conjphi11W33 = secondorderapplied(phi11NF.conj, W33NF)
     
-    DS_Q02Q011 = secondorderapplied(Q02NF, Q011NF)
-    DS_Q22Q211 = secondorderapplied(Q22NF, Q211NF)
-    DS_phi11Q121 = secondorderapplied(phi11NF, Q121NF)
-    DS_conjphi11Q1221 = secondorderapplied(phi11NF.conj, Q1221NF)
+    DS_W02W011 = secondorderapplied(W02NF, W011NF)
+    DS_W22W211 = secondorderapplied(W22NF, W211NF)
+    DS_phi11W121 = secondorderapplied(phi11NF, W121NF)
+    DS_conjphi11W1221 = secondorderapplied(phi11NF.conj, W1221NF)
     
-    DS_Q02Q211 = secondorderapplied(Q02NF, Q211NF)
-    DS_Q22conjQ011 = secondorderapplied(Q22NF, Q011NF.conj)
-    DS_phi11conjQ121 = secondorderapplied(phi11NF, Q121NF.conj)
-    DS_conjphi11Q13 = secondorderapplied(phi11NF.conj, Q13NF)
-    DS_conjphi11Q321 = secondorderapplied(phi11NF.conj, Q321NF)
+    DS_W02W211 = secondorderapplied(W02NF, W211NF)
+    DS_W22conjW011 = secondorderapplied(W22NF, W011NF.conj)
+    DS_phi11conjW121 = secondorderapplied(phi11NF, W121NF.conj)
+    DS_conjphi11W13 = secondorderapplied(phi11NF.conj, W13NF)
+    DS_conjphi11W321 = secondorderapplied(phi11NF.conj, W321NF)
     
-    DS_Q211Q211 = secondorderapplied(Q211NF, Q211NF)
-    DS_Q011conjQ011 = secondorderapplied(Q011NF, Q011NF.conj)
+    DS_W211W211 = secondorderapplied(W211NF, W211NF)
+    DS_W011conjW011 = secondorderapplied(W011NF, W011NF.conj)
     
-    DS_Q011Q211 = secondorderapplied(Q011NF, Q211NF)
-    DS_phi11Q321 = secondorderapplied(phi11NF, Q321NF)
+    DS_W011W211 = secondorderapplied(W011NF, W211NF)
+    DS_phi11W321 = secondorderapplied(phi11NF, W321NF)
     
-    TS_phi11phi11conjQ22 = thirdorderapplied(phi11NF, phi11NF, Q22NF.conj)
-    TS_phi11conjphi11Q02 = thirdorderapplied(phi11NF, phi11NF.conj, Q02NF)
+    TS_phi11phi11conjW22 = thirdorderapplied(phi11NF, phi11NF, W22NF.conj)
+    TS_phi11conjphi11W02 = thirdorderapplied(phi11NF, phi11NF.conj, W02NF)
     
-    TS_phi11phi11Q02 = thirdorderapplied(phi11NF, phi11NF, Q02NF)
-    TS_phi11conjphi11Q22 = thirdorderapplied(phi11NF, phi11NF.conj, Q22NF)
+    TS_phi11phi11W02 = thirdorderapplied(phi11NF, phi11NF, W02NF)
+    TS_phi11conjphi11W22 = thirdorderapplied(phi11NF, phi11NF.conj, W22NF)
     
-    TS_phi11phi11Q211 = thirdorderapplied(phi11NF, phi11NF, Q211NF)
-    TS_phi11conjphi11Q011 = thirdorderapplied(phi11NF, phi11NF.conj, Q011NF)
+    TS_phi11phi11W211 = thirdorderapplied(phi11NF, phi11NF, W211NF)
+    TS_phi11conjphi11W011 = thirdorderapplied(phi11NF, phi11NF.conj, W011NF)
         
-    TS_phi11phi11conjQ011 = thirdorderapplied(phi11NF, phi11NF, Q011NF.conj)
-    TS_phi11conjphi11Q211 = thirdorderapplied(phi11NF, phi11NF.conj, Q211NF)
-    TS_conjphi11conjphi11Q22 = thirdorderapplied(phi11NF.conj, phi11NF.conj, Q22NF)
+    TS_phi11phi11conjW011 = thirdorderapplied(phi11NF, phi11NF, W011NF.conj)
+    TS_phi11conjphi11W211 = thirdorderapplied(phi11NF, phi11NF.conj, W211NF)
+    TS_conjphi11conjphi11W22 = thirdorderapplied(phi11NF.conj, phi11NF.conj, W22NF)
     
     Q4S_phi11phi11conjphi11conjphi11 = fourthorderapplied(phi11NF, phi11NF, phi11NF.conj, phi11NF.conj)
     Q4S_phi11phi11phi11conjphi11 = fourthorderapplied(phi11NF, phi11NF, phi11NF, phi11NF.conj)
     
-    negativeRHS.actualcoord = Add(Mul(-1, Add(C130, C130conj), Q02NF.dummy), Mul(2, DS_Q02Q02),
-                                  DS_Q22conjQ22, Mul(2, DS_phi11conjQ13),
-                                  Mul(3, TS_phi11phi11conjQ22), Mul(6, TS_phi11conjphi11Q02),
+    negativeRHS.actualcoord = Add(Mul(-1, Add(C130, C130conj), W02NF.dummy), Mul(2, DS_W02W02),
+                                  DS_W22conjW22, Mul(2, DS_phi11conjW13),
+                                  Mul(3, TS_phi11phi11conjW22), Mul(6, TS_phi11conjphi11W02),
                                   Mul(3, Q4S_phi11phi11conjphi11conjphi11))
     
-    Q04NF = linearsolver(Q04NF, negativeRHS, coefmat00)
+    W04NF = linearsolver(W04NF, negativeRHS, coefmat00)
     
-    negativeRHS.actualcoord = Add(Mul(-2, C130, Q22NF.dummy), Mul(4, DS_Q02Q22), Mul(2, DS_phi11Q13),
-                                  Mul(2, DS_conjphi11Q33), Mul(6, TS_phi11phi11Q02), Mul(6, TS_phi11conjphi11Q22),
+    negativeRHS.actualcoord = Add(Mul(-2, C130, W22NF.dummy), Mul(4, DS_W02W22), Mul(2, DS_phi11W13),
+                                  Mul(2, DS_conjphi11W33), Mul(6, TS_phi11phi11W02), Mul(6, TS_phi11conjphi11W22),
                                   Mul(4, Q4S_phi11phi11phi11conjphi11))
     
-    Q24NF = linearsolver(Q24NF, negativeRHS, coefmat22)
+    W24NF = linearsolver(W24NF, negativeRHS, coefmat22)
     
-    negativeRHS.actualcoord = Add(Mul(-1, Add(C130, C112), Q011NF.dummy), Mul(4, DS_Q02Q011), Mul(2, DS_Q22Q211),
-                                  Mul(2, DS_phi11Q13), Mul(2, DS_phi11Q121), Mul(2, DS_conjphi11Q1221),
-                                  Mul(12, TS_phi11phi11Q02), Mul(3, TS_phi11phi11Q211),
-                                  Mul(6, TS_phi11conjphi11Q22), Mul(6, TS_phi11conjphi11Q011),
+    negativeRHS.actualcoord = Add(Mul(-1, Add(C130, C112), W011NF.dummy), Mul(4, DS_W02W011), Mul(2, DS_W22W211),
+                                  Mul(2, DS_phi11W13), Mul(2, DS_phi11W121), Mul(2, DS_conjphi11W1221),
+                                  Mul(12, TS_phi11phi11W02), Mul(3, TS_phi11phi11W211),
+                                  Mul(6, TS_phi11conjphi11W22), Mul(6, TS_phi11conjphi11W011),
                                   Mul(12, Q4S_phi11phi11phi11conjphi11))
     
-    Q031NF = linearsolver(Q031NF, negativeRHS, coefmat02)
+    W031NF = linearsolver(W031NF, negativeRHS, coefmat02)
     
-    negativeRHS.actualcoord = Add(Mul(-1, Add(C130, C112conj), Q211NF.dummy),
-                                  Mul(4, DS_Q02Q211), Mul(2, DS_Q22conjQ011), Mul(2, DS_phi11conjQ121),
-                                  Mul(2, DS_conjphi11Q13), Mul(2, DS_conjphi11Q321),
-                                  Mul(3, TS_phi11phi11conjQ011), Mul(12, TS_phi11conjphi11Q02),
-                                  Mul(6, TS_phi11conjphi11Q211), Mul(6, TS_conjphi11conjphi11Q22),
+    negativeRHS.actualcoord = Add(Mul(-1, Add(C130, C112conj), W211NF.dummy),
+                                  Mul(4, DS_W02W211), Mul(2, DS_W22conjW011), Mul(2, DS_phi11conjW121),
+                                  Mul(2, DS_conjphi11W13), Mul(2, DS_conjphi11W321),
+                                  Mul(3, TS_phi11phi11conjW011), Mul(12, TS_phi11conjphi11W02),
+                                  Mul(6, TS_phi11conjphi11W211), Mul(6, TS_conjphi11conjphi11W22),
                                   Mul(12, Q4S_phi11phi11conjphi11conjphi11))
     
-    Q231NF = linearsolver(Q231NF, negativeRHS, coefmat20)
+    W231NF = linearsolver(W231NF, negativeRHS, coefmat20)
     
-    negativeRHS.actualcoord = Add(Mul(-2, Add(C112, C112conj), Q02NF.dummy), Mul(4, DS_Q02Q02),
-                                  DS_Q211Q211, DS_Q011conjQ011, Mul(4, DS_phi11conjQ121),
-                                  Mul(12, TS_phi11conjphi11Q02), Mul(6, TS_phi11conjphi11Q211),
-                                  Mul(6, TS_phi11phi11conjQ011), Mul(12, Q4S_phi11phi11conjphi11conjphi11))
+    negativeRHS.actualcoord = Add(Mul(-2, Add(C112, C112conj), W02NF.dummy), Mul(4, DS_W02W02),
+                                  DS_W211W211, DS_W011conjW011, Mul(4, DS_phi11conjW121),
+                                  Mul(12, TS_phi11conjphi11W02), Mul(6, TS_phi11conjphi11W211),
+                                  Mul(6, TS_phi11phi11conjW011), Mul(12, Q4S_phi11phi11conjphi11conjphi11))
         
-    Q022NF = linearsolver(Q022NF, negativeRHS, coefmat00)
+    W022NF = linearsolver(W022NF, negativeRHS, coefmat00)
     
-    negativeRHS.actualcoord = Add(Mul(-2, C112, Q22NF.dummy), Mul(2, DS_Q011Q211), Mul(4, DS_Q02Q22),
-                                  Mul(2, DS_phi11Q121), Mul(2, DS_phi11Q321),
-                                  Mul(2, DS_conjphi11Q1221), Mul(6, TS_phi11phi11Q02),
-                                  Mul(6, TS_phi11phi11Q211), Mul(6, TS_phi11conjphi11Q22),
-                                  Mul(6, TS_phi11conjphi11Q011), Mul(12, Q4S_phi11phi11phi11conjphi11))
+    negativeRHS.actualcoord = Add(Mul(-2, C112, W22NF.dummy), Mul(2, DS_W011W211), Mul(4, DS_W02W22),
+                                  Mul(2, DS_phi11W121), Mul(2, DS_phi11W321),
+                                  Mul(2, DS_conjphi11W1221), Mul(6, TS_phi11phi11W02),
+                                  Mul(6, TS_phi11phi11W211), Mul(6, TS_phi11conjphi11W22),
+                                  Mul(6, TS_phi11conjphi11W011), Mul(12, Q4S_phi11phi11phi11conjphi11))
     
-    Q222NF = linearsolver(Q222NF, negativeRHS, coefmat22)
+    W222NF = linearsolver(W222NF, negativeRHS, coefmat22)
     
-    Q04NF_eval = evaluation_dict(Q04NF)
-    Q24NF_eval = evaluation_dict(Q24NF)
-    Q031NF_eval = evaluation_dict(Q031NF)
-    Q231NF_eval = evaluation_dict(Q231NF)
-    Q022NF_eval = evaluation_dict(Q022NF)
-    Q222NF_eval = evaluation_dict(Q222NF)
+    W04NF_eval = evaluation_dict(W04NF)
+    W24NF_eval = evaluation_dict(W24NF)
+    W031NF_eval = evaluation_dict(W031NF)
+    W231NF_eval = evaluation_dict(W231NF)
+    W022NF_eval = evaluation_dict(W022NF)
+    W222NF_eval = evaluation_dict(W222NF)
     
     print('Fourth order ready')
     
-    DS_phi11Q04 = secondorderapplied(phi11NF, Q04NF)
-    DS_phi11conjQ04 = secondorderapplied(phi11NF, Q04NF.conj)
-    DS_conjphi11Q24 = secondorderapplied(phi11NF.conj, Q24NF)
-    DS_Q02Q13 = secondorderapplied(Q02NF, Q13NF)
-    DS_Q22conjQ13 = secondorderapplied(Q22NF, Q13NF.conj)
-    DS_conjQ22Q33 = secondorderapplied(Q22NF.conj, Q33NF)
+    DS_phi11W04 = secondorderapplied(phi11NF, W04NF)
+    DS_phi11conjW04 = secondorderapplied(phi11NF, W04NF.conj)
+    DS_conjphi11W24 = secondorderapplied(phi11NF.conj, W24NF)
+    DS_W02W13 = secondorderapplied(W02NF, W13NF)
+    DS_W22conjW13 = secondorderapplied(W22NF, W13NF.conj)
+    DS_conjW22W33 = secondorderapplied(W22NF.conj, W33NF)
     
-    DS_phi11conjQ231 = secondorderapplied(phi11NF, Q231NF.conj)
-    DS_conjphi11Q031 = secondorderapplied(phi11NF.conj, Q031NF)
-    DS_Q02Q121 = secondorderapplied(Q02NF, Q121NF)
-    DS_conjQ22Q1221 = secondorderapplied(Q22NF.conj, Q1221NF)
-    DS_Q22conjQ321 = secondorderapplied(Q22NF, Q321NF.conj)
-    DS_Q13Q211 = secondorderapplied(Q13NF, Q211NF)
-    DS_conjQ13Q011 = secondorderapplied(Q13NF.conj, Q011NF)
+    DS_phi11conjW231 = secondorderapplied(phi11NF, W231NF.conj)
+    DS_conjphi11W031 = secondorderapplied(phi11NF.conj, W031NF)
+    DS_W02W121 = secondorderapplied(W02NF, W121NF)
+    DS_conjW22W1221 = secondorderapplied(W22NF.conj, W1221NF)
+    DS_W22conjW321 = secondorderapplied(W22NF, W321NF.conj)
+    DS_W13W211 = secondorderapplied(W13NF, W211NF)
+    DS_conjW13W011 = secondorderapplied(W13NF.conj, W011NF)
     
-    DS_phi11Q022 = secondorderapplied(phi11NF, Q022NF)
-    DS_phi11conjQ022 = secondorderapplied(phi11NF, Q022NF.conj)
-    DS_phi11Q231 = secondorderapplied(phi11NF, Q231NF)
-    DS_conjphi11Q222 = secondorderapplied(phi11NF.conj, Q222NF)
-    DS_conjQ121Q22 = secondorderapplied(Q121NF.conj, Q22NF)
-    DS_conjQ121Q011 = secondorderapplied(Q121NF.conj, Q011NF)
-    DS_Q211Q121 = secondorderapplied(Q211NF, Q121NF)
-    DS_Q211Q321 = secondorderapplied(Q211NF, Q321NF)
-    DS_conjQ011Q1221 = secondorderapplied(Q011NF.conj, Q1221NF)
+    DS_phi11W022 = secondorderapplied(phi11NF, W022NF)
+    DS_phi11conjW022 = secondorderapplied(phi11NF, W022NF.conj)
+    DS_phi11W231 = secondorderapplied(phi11NF, W231NF)
+    DS_conjphi11W222 = secondorderapplied(phi11NF.conj, W222NF)
+    DS_conjW121W22 = secondorderapplied(W121NF.conj, W22NF)
+    DS_conjW121W011 = secondorderapplied(W121NF.conj, W011NF)
+    DS_W211W121 = secondorderapplied(W211NF, W121NF)
+    DS_W211W321 = secondorderapplied(W211NF, W321NF)
+    DS_conjW011W1221 = secondorderapplied(W011NF.conj, W1221NF)
     
-    TS_phi11Q02Q02 = thirdorderapplied(phi11NF, Q02NF, Q02NF)
-    TS_phi11Q22conjQ22 = thirdorderapplied(phi11NF, Q22NF, Q22NF.conj)
-    TS_conjphi11Q02Q22 = thirdorderapplied(phi11NF.conj, Q02NF, Q22NF)
-    TS_phi11phi11conjQ13 = thirdorderapplied(phi11NF, phi11NF, Q13NF.conj)
-    TS_phi11conjphi11Q13 = thirdorderapplied(phi11NF, phi11NF.conj, Q13NF)
-    TS_conjphi11conjphi11Q33 = thirdorderapplied(phi11NF.conj, phi11NF.conj, Q33NF)
+    TS_phi11W02W02 = thirdorderapplied(phi11NF, W02NF, W02NF)
+    TS_phi11W22conjW22 = thirdorderapplied(phi11NF, W22NF, W22NF.conj)
+    TS_conjphi11W02W22 = thirdorderapplied(phi11NF.conj, W02NF, W22NF)
+    TS_phi11phi11conjW13 = thirdorderapplied(phi11NF, phi11NF, W13NF.conj)
+    TS_phi11conjphi11W13 = thirdorderapplied(phi11NF, phi11NF.conj, W13NF)
+    TS_conjphi11conjphi11W33 = thirdorderapplied(phi11NF.conj, phi11NF.conj, W33NF)
     
-    TS_phi11Q02Q211 = thirdorderapplied(phi11NF, Q02NF, Q211NF)
-    TS_phi11conjQ22Q22 = thirdorderapplied(phi11NF, Q22NF.conj, Q22NF)
-    TS_phi11conjQ22Q011 = thirdorderapplied(phi11NF, Q22NF.conj, Q011NF)
-    TS_conjphi11Q02Q011 = thirdorderapplied(phi11NF.conj, Q02NF, Q011NF)
-    TS_conjphi11Q22Q211 = thirdorderapplied(phi11NF.conj, Q22NF, Q211NF)
-    TS_phi11conjphi11Q121 = thirdorderapplied(phi11NF, phi11NF.conj, Q121NF)
-    TS_conjphi11conjphi11Q1221 = thirdorderapplied(phi11NF.conj, phi11NF.conj, Q1221NF)
-    TS_phi11phi11conjQ321 = thirdorderapplied(phi11NF, phi11NF, Q321NF.conj)
+    TS_phi11W02W211 = thirdorderapplied(phi11NF, W02NF, W211NF)
+    TS_phi11conjW22W22 = thirdorderapplied(phi11NF, W22NF.conj, W22NF)
+    TS_phi11conjW22W011 = thirdorderapplied(phi11NF, W22NF.conj, W011NF)
+    TS_conjphi11W02W011 = thirdorderapplied(phi11NF.conj, W02NF, W011NF)
+    TS_conjphi11W22W211 = thirdorderapplied(phi11NF.conj, W22NF, W211NF)
+    TS_phi11conjphi11W121 = thirdorderapplied(phi11NF, phi11NF.conj, W121NF)
+    TS_conjphi11conjphi11W1221 = thirdorderapplied(phi11NF.conj, phi11NF.conj, W1221NF)
+    TS_phi11phi11conjW321 = thirdorderapplied(phi11NF, phi11NF, W321NF.conj)
     
-    TS_phi11Q211Q211 = thirdorderapplied(phi11NF, Q211NF, Q211NF)
-    TS_phi11conjQ011Q22 = thirdorderapplied(phi11NF, Q011NF.conj, Q22NF)
-    TS_phi11conjQ011Q011 = thirdorderapplied(phi11NF, Q011NF.conj, Q011NF)
-    TS_conjphi11Q211Q22 = thirdorderapplied(phi11NF.conj, Q211NF, Q22NF)
-    TS_conjphi11Q211Q011 = thirdorderapplied(phi11NF.conj, Q211NF, Q011NF)
-    TS_phi11phi11conjQ121 = thirdorderapplied(phi11NF, phi11NF, Q121NF.conj)    
-    TS_phi11conjphi11Q321 = thirdorderapplied(phi11NF, phi11NF.conj, Q321NF)
+    TS_phi11W211W211 = thirdorderapplied(phi11NF, W211NF, W211NF)
+    TS_phi11conjW011W22 = thirdorderapplied(phi11NF, W011NF.conj, W22NF)
+    TS_phi11conjW011W011 = thirdorderapplied(phi11NF, W011NF.conj, W011NF)
+    TS_conjphi11W211W22 = thirdorderapplied(phi11NF.conj, W211NF, W22NF)
+    TS_conjphi11W211W011 = thirdorderapplied(phi11NF.conj, W211NF, W011NF)
+    TS_phi11phi11conjW121 = thirdorderapplied(phi11NF, phi11NF, W121NF.conj)    
+    TS_phi11conjphi11W321 = thirdorderapplied(phi11NF, phi11NF.conj, W321NF)
     
-    Q4S_phi11phi11phi11conjQ22 = fourthorderapplied(phi11NF, phi11NF, phi11NF, Q22NF.conj)
-    Q4S_phi11phi11conjphi11Q02 = fourthorderapplied(phi11NF, phi11NF, phi11NF.conj, Q02NF)
-    Q4S_phi11conjphi11conjphi11Q22 = fourthorderapplied(phi11NF, phi11NF.conj, phi11NF.conj, Q22NF)
+    Q4S_phi11phi11phi11conjW22 = fourthorderapplied(phi11NF, phi11NF, phi11NF, W22NF.conj)
+    Q4S_phi11phi11conjphi11W02 = fourthorderapplied(phi11NF, phi11NF, phi11NF.conj, W02NF)
+    Q4S_phi11conjphi11conjphi11W22 = fourthorderapplied(phi11NF, phi11NF.conj, phi11NF.conj, W22NF)
     
-    Q4S_phi11phi11conjphi11Q211 = fourthorderapplied(phi11NF, phi11NF, phi11NF.conj, Q211NF)
-    Q4S_phi11conjphi11conjphi11Q011 = fourthorderapplied(phi11NF, phi11NF.conj, phi11NF.conj, Q011NF)
+    Q4S_phi11phi11conjphi11W211 = fourthorderapplied(phi11NF, phi11NF, phi11NF.conj, W211NF)
+    Q4S_phi11conjphi11conjphi11W011 = fourthorderapplied(phi11NF, phi11NF.conj, phi11NF.conj, W011NF)
     
-    Q4S_phi11phi11phi11conjQ011 = fourthorderapplied(phi11NF, phi11NF, phi11NF, Q011NF.conj)
+    Q4S_phi11phi11phi11conjW011 = fourthorderapplied(phi11NF, phi11NF, phi11NF, W011NF.conj)
     
     Q5S_phi11phi11phi11conjphi11conjphi11 = fifthorderapplied(phi11NF, phi11NF, phi11NF, phi11NF.conj, phi11NF.conj)
         
     C150 = Mul(Pow(denominator, -1),
-               psi11NF.dummy.dot(Add(Mul(-1, Add(Mul(2, C130), C130conj), Q13NF.dummy),
-                                     Mul(2, DS_phi11Q04), Mul(2, DS_phi11conjQ04), Mul(2, DS_conjphi11Q24),
-                                     Mul(4, DS_Q02Q13), Mul(2, DS_Q22conjQ13), Mul(2, DS_conjQ22Q33),
-                                     Mul(12, TS_phi11Q02Q02), Mul(6, TS_phi11Q22conjQ22),
-                                     Mul(12, TS_conjphi11Q02Q22), Mul(3, TS_phi11phi11conjQ13),
-                                     Mul(6, TS_phi11conjphi11Q13), Mul(3, TS_conjphi11conjphi11Q33),
-                                     Mul(4, Q4S_phi11phi11phi11conjQ22), Mul(24, Q4S_phi11phi11conjphi11Q02),
-                                     Mul(12, Q4S_phi11conjphi11conjphi11Q22),
+               psi11NF.dummy.dot(Add(Mul(-1, Add(Mul(2, C130), C130conj), W13NF.dummy),
+                                     Mul(2, DS_phi11W04), Mul(2, DS_phi11conjW04), Mul(2, DS_conjphi11W24),
+                                     Mul(4, DS_W02W13), Mul(2, DS_W22conjW13), Mul(2, DS_conjW22W33),
+                                     Mul(12, TS_phi11W02W02), Mul(6, TS_phi11W22conjW22),
+                                     Mul(12, TS_conjphi11W02W22), Mul(3, TS_phi11phi11conjW13),
+                                     Mul(6, TS_phi11conjphi11W13), Mul(3, TS_conjphi11conjphi11W33),
+                                     Mul(4, Q4S_phi11phi11phi11conjW22), Mul(24, Q4S_phi11phi11conjphi11W02),
+                                     Mul(12, Q4S_phi11conjphi11conjphi11W22),
                                      Mul(10, Q5S_phi11phi11phi11conjphi11conjphi11))))
     
     C114 = Mul(Pow(denominator, -1),
-               psi11NF.dummy.dot(Add(Mul(-1, Add(C112, C130, C130conj), Q121NF.dummy),
-                                     Mul(2, DS_phi11Q04), Mul(2, DS_phi11conjQ04), Mul(2, DS_phi11conjQ231),
-                                     Mul(2, DS_conjphi11Q031), Mul(4, DS_Q02Q121), Mul(2, DS_conjQ22Q1221),
-                                     Mul(2, DS_Q22conjQ321), Mul(2, DS_Q13Q211), Mul(2, DS_conjQ13Q011),
-                                     Mul(12, Add(TS_phi11Q02Q02, TS_phi11Q02Q211)), Mul(6, TS_phi11conjQ22Q22),
-                                     Mul(6, TS_phi11conjQ22Q011), Mul(12, TS_conjphi11Q02Q011),
-                                     Mul(6, TS_conjphi11Q22Q211), Mul(6, Add(TS_phi11conjphi11Q13,
-                                     TS_phi11conjphi11Q121)), Mul(3, TS_conjphi11conjphi11Q1221),
-                                     Mul(6, TS_phi11phi11conjQ13), Mul(3, TS_phi11phi11conjQ321),
-                                     Mul(48, Q4S_phi11phi11conjphi11Q02), Mul(12, Q4S_phi11phi11conjphi11Q211),
-                                     Mul(12, Q4S_phi11phi11phi11conjQ22),
-                                     Mul(12, Add(Q4S_phi11conjphi11conjphi11Q22, Q4S_phi11conjphi11conjphi11Q011)),
+               psi11NF.dummy.dot(Add(Mul(-1, Add(C112, C130, C130conj), W121NF.dummy),
+                                     Mul(2, DS_phi11W04), Mul(2, DS_phi11conjW04), Mul(2, DS_phi11conjW231),
+                                     Mul(2, DS_conjphi11W031), Mul(4, DS_W02W121), Mul(2, DS_conjW22W1221),
+                                     Mul(2, DS_W22conjW321), Mul(2, DS_W13W211), Mul(2, DS_conjW13W011),
+                                     Mul(12, Add(TS_phi11W02W02, TS_phi11W02W211)), Mul(6, TS_phi11conjW22W22),
+                                     Mul(6, TS_phi11conjW22W011), Mul(12, TS_conjphi11W02W011),
+                                     Mul(6, TS_conjphi11W22W211), Mul(6, Add(TS_phi11conjphi11W13,
+                                     TS_phi11conjphi11W121)), Mul(3, TS_conjphi11conjphi11W1221),
+                                     Mul(6, TS_phi11phi11conjW13), Mul(3, TS_phi11phi11conjW321),
+                                     Mul(48, Q4S_phi11phi11conjphi11W02), Mul(12, Q4S_phi11phi11conjphi11W211),
+                                     Mul(12, Q4S_phi11phi11phi11conjW22),
+                                     Mul(12, Add(Q4S_phi11conjphi11conjphi11W22, Q4S_phi11conjphi11conjphi11W011)),
                                      Mul(30, Q5S_phi11phi11phi11conjphi11conjphi11))))
         
     C132 = Mul(Pow(denominator, -1),
-               psi11NF.dummy.dot(Add(Mul(-1, Add(C130, C112, C112conj), Q121NF.dummy),
-                                     Mul(-1, Add(Mul(2, C112), C112conj), Q13NF.dummy), Mul(2, DS_phi11Q022),
-                                     Mul(2, DS_phi11conjQ022), Mul(2, DS_phi11Q231), Mul(2, DS_conjphi11Q222),
-                                     Mul(2, DS_conjphi11Q031), Mul(4, DS_Q02Q121), Mul(2, DS_conjQ121Q22),
-                                     Mul(2, DS_conjQ121Q011), Mul(2, DS_Q211Q121), Mul(2, DS_Q211Q321),
-                                     Mul(2, DS_conjQ011Q1221), Mul(4, DS_Q02Q13), Mul(6, TS_phi11Q211Q211),
-                                     Mul(6, TS_phi11conjQ011Q22), Mul(6, TS_phi11conjQ011Q011),
-                                     Mul(12, Add(TS_conjphi11Q02Q22, TS_conjphi11Q02Q011)),
-                                     Mul(6, Add(TS_conjphi11Q211Q22, TS_conjphi11Q211Q011)),
-                                     Mul(12, Add(Mul(2, TS_phi11Q02Q02), TS_phi11Q02Q211)),
-                                     Mul(9, TS_phi11phi11conjQ121), Mul(6, TS_phi11conjphi11Q13),
-                                     Mul(12, TS_phi11conjphi11Q121), Mul(6, TS_phi11conjphi11Q321),
-                                     Mul(6, TS_conjphi11conjphi11Q1221),
-                                     Mul(36, Add(Mul(2, Q4S_phi11phi11conjphi11Q02), Q4S_phi11phi11conjphi11Q211)),
-                                     Mul(12, Q4S_phi11phi11phi11conjQ011),
-                                     Mul(24, Q4S_phi11conjphi11conjphi11Q22), Mul(24, Q4S_phi11conjphi11conjphi11Q011),
+               psi11NF.dummy.dot(Add(Mul(-1, Add(C130, C112, C112conj), W121NF.dummy),
+                                     Mul(-1, Add(Mul(2, C112), C112conj), W13NF.dummy), Mul(2, DS_phi11W022),
+                                     Mul(2, DS_phi11conjW022), Mul(2, DS_phi11W231), Mul(2, DS_conjphi11W222),
+                                     Mul(2, DS_conjphi11W031), Mul(4, DS_W02W121), Mul(2, DS_conjW121W22),
+                                     Mul(2, DS_conjW121W011), Mul(2, DS_W211W121), Mul(2, DS_W211W321),
+                                     Mul(2, DS_conjW011W1221), Mul(4, DS_W02W13), Mul(6, TS_phi11W211W211),
+                                     Mul(6, TS_phi11conjW011W22), Mul(6, TS_phi11conjW011W011),
+                                     Mul(12, Add(TS_conjphi11W02W22, TS_conjphi11W02W011)),
+                                     Mul(6, Add(TS_conjphi11W211W22, TS_conjphi11W211W011)),
+                                     Mul(12, Add(Mul(2, TS_phi11W02W02), TS_phi11W02W211)),
+                                     Mul(9, TS_phi11phi11conjW121), Mul(6, TS_phi11conjphi11W13),
+                                     Mul(12, TS_phi11conjphi11W121), Mul(6, TS_phi11conjphi11W321),
+                                     Mul(6, TS_conjphi11conjphi11W1221),
+                                     Mul(36, Add(Mul(2, Q4S_phi11phi11conjphi11W02), Q4S_phi11phi11conjphi11W211)),
+                                     Mul(12, Q4S_phi11phi11phi11conjW011),
+                                     Mul(24, Q4S_phi11conjphi11conjphi11W22), Mul(24, Q4S_phi11conjphi11conjphi11W011),
                                      Mul(60, Q5S_phi11phi11phi11conjphi11conjphi11))))
     
     print('The calculation of the fifth-order coefficients was carried out successfully. ' +
           'The saving process could take longer.')
     
-C130 = C130.subs(Q02NF_eval)
-C130 = C130.subs(Q22NF_eval)
-C130 = C130.subs(Q011NF_eval)
-C130 = C130.subs(Q211NF_eval)
+C130 = C130.subs(W02NF_eval)
+C130 = C130.subs(W22NF_eval)
+C130 = C130.subs(W011NF_eval)
+C130 = C130.subs(W211NF_eval)
 
-C112 = C112.subs(Q02NF_eval)
-C112 = C112.subs(Q22NF_eval)
-C112 = C112.subs(Q011NF_eval)
-C112 = C112.subs(Q211NF_eval)
+C112 = C112.subs(W02NF_eval)
+C112 = C112.subs(W22NF_eval)
+C112 = C112.subs(W011NF_eval)
+C112 = C112.subs(W211NF_eval)
 
 C130 = C130.subs(phi11NF_eval)
 C130 = C130.subs(psi11NF_eval)
@@ -778,59 +778,59 @@ print('The third-order coefficients were computed and saved into text files.')
 if fifthcoef=='n':
     print('Everything but the fifth-order coefficients was computed and saved into files.')
 elif fifthcoef=='y':
-    C150 = C150.subs(Q04NF_eval)
-    C150 = C150.subs(Q24NF_eval)
-    C150 = C150.subs(Q031NF_eval)
-    C150 = C150.subs(Q231NF_eval)
-    C150 = C150.subs(Q022NF_eval)
-    C150 = C150.subs(Q222NF_eval)
+    C150 = C150.subs(W04NF_eval)
+    C150 = C150.subs(W24NF_eval)
+    C150 = C150.subs(W031NF_eval)
+    C150 = C150.subs(W231NF_eval)
+    C150 = C150.subs(W022NF_eval)
+    C150 = C150.subs(W222NF_eval)
     
-    C114 = C114.subs(Q04NF_eval)
-    C114 = C114.subs(Q24NF_eval)
-    C114 = C114.subs(Q031NF_eval)
-    C114 = C114.subs(Q231NF_eval)
-    C114 = C114.subs(Q022NF_eval)
-    C114 = C114.subs(Q222NF_eval)
+    C114 = C114.subs(W04NF_eval)
+    C114 = C114.subs(W24NF_eval)
+    C114 = C114.subs(W031NF_eval)
+    C114 = C114.subs(W231NF_eval)
+    C114 = C114.subs(W022NF_eval)
+    C114 = C114.subs(W222NF_eval)
     
-    C132 = C132.subs(Q04NF_eval)
-    C132 = C132.subs(Q24NF_eval)
-    C132 = C132.subs(Q031NF_eval)
-    C132 = C132.subs(Q231NF_eval)
-    C132 = C132.subs(Q022NF_eval)
-    C132 = C132.subs(Q222NF_eval)
+    C132 = C132.subs(W04NF_eval)
+    C132 = C132.subs(W24NF_eval)
+    C132 = C132.subs(W031NF_eval)
+    C132 = C132.subs(W231NF_eval)
+    C132 = C132.subs(W022NF_eval)
+    C132 = C132.subs(W222NF_eval)
     
-    C150 = C150.subs(Q13NF_eval)
-    C150 = C150.subs(Q33NF_eval)
-    C150 = C150.subs(Q121NF_eval)
-    C150 = C150.subs(Q1221NF_eval)
-    C150 = C150.subs(Q321NF_eval)
+    C150 = C150.subs(W13NF_eval)
+    C150 = C150.subs(W33NF_eval)
+    C150 = C150.subs(W121NF_eval)
+    C150 = C150.subs(W1221NF_eval)
+    C150 = C150.subs(W321NF_eval)
     
-    C114 = C114.subs(Q13NF_eval)
-    C114 = C114.subs(Q33NF_eval)
-    C114 = C114.subs(Q121NF_eval)
-    C114 = C114.subs(Q1221NF_eval)
-    C114 = C114.subs(Q321NF_eval)
+    C114 = C114.subs(W13NF_eval)
+    C114 = C114.subs(W33NF_eval)
+    C114 = C114.subs(W121NF_eval)
+    C114 = C114.subs(W1221NF_eval)
+    C114 = C114.subs(W321NF_eval)
     
-    C132 = C132.subs(Q13NF_eval)
-    C132 = C132.subs(Q33NF_eval)
-    C132 = C132.subs(Q121NF_eval)
-    C132 = C132.subs(Q1221NF_eval)
-    C132 = C132.subs(Q321NF_eval)
+    C132 = C132.subs(W13NF_eval)
+    C132 = C132.subs(W33NF_eval)
+    C132 = C132.subs(W121NF_eval)
+    C132 = C132.subs(W1221NF_eval)
+    C132 = C132.subs(W321NF_eval)
     
-    C150 = C150.subs(Q02NF_eval)
-    C150 = C150.subs(Q22NF_eval)
-    C150 = C150.subs(Q011NF_eval)
-    C150 = C150.subs(Q211NF_eval)
+    C150 = C150.subs(W02NF_eval)
+    C150 = C150.subs(W22NF_eval)
+    C150 = C150.subs(W011NF_eval)
+    C150 = C150.subs(W211NF_eval)
     
-    C114 = C114.subs(Q02NF_eval)
-    C114 = C114.subs(Q22NF_eval)
-    C114 = C114.subs(Q011NF_eval)
-    C114 = C114.subs(Q211NF_eval)
+    C114 = C114.subs(W02NF_eval)
+    C114 = C114.subs(W22NF_eval)
+    C114 = C114.subs(W011NF_eval)
+    C114 = C114.subs(W211NF_eval)
     
-    C132 = C132.subs(Q02NF_eval)
-    C132 = C132.subs(Q22NF_eval)
-    C132 = C132.subs(Q011NF_eval)
-    C132 = C132.subs(Q211NF_eval)
+    C132 = C132.subs(W02NF_eval)
+    C132 = C132.subs(W22NF_eval)
+    C132 = C132.subs(W011NF_eval)
+    C132 = C132.subs(W211NF_eval)
     
     C150 = C150.subs(phi11NF_eval)
     C150 = C150.subs(psi11NF_eval)
