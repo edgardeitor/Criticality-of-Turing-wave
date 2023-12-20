@@ -1,7 +1,7 @@
 parameters={"k1": -8.5,
         "k3": 10,
-        "k4": 2,
-        "tau": 50,
+        "k4": 3,
+        "tau": 10,
         "D1": 1,
         "D2": 1,
         "D3": 60}
@@ -22,9 +22,9 @@ tol=1e-7
 
 phiunit='n'
 
-crosscoef='n'
+crosscoef='y'
 
-crosspar=''
+crosspar='k1'
 
 equilibrium=[]
 
@@ -36,15 +36,15 @@ cod2='y'
 
 plot2d='y'
 
-parameters_on_axes=['k1','k4']
+parameters_on_axes=['k1','k3']
 
-names_of_parameters=[]
+names_of_parameters=['k_0','k_v']
 
-intervalx=[-12,-6]
+intervalx=[-8,-1]
 
-intervaly=[1,15]
+intervaly=[2,10]
 
-lines_to_search={'k1':-8}
+lines_to_search={'k3':2.5, 'k1':-2.4}
 
 plot3d='n'
 

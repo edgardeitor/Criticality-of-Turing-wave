@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    280571,       6263]
-NotebookOptionsPosition[    278575,       6218]
-NotebookOutlinePosition[    279122,       6238]
-CellTagsIndexPosition[    279079,       6235]
+NotebookDataLength[    284983,       6375]
+NotebookOptionsPosition[    282763,       6326]
+NotebookOutlinePosition[    283308,       6346]
+CellTagsIndexPosition[    283265,       6343]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -2510,6 +2510,113 @@ changing the integration method.\>\"", "]"}]}], "]"}]}], "Input",
 
 Cell[CellGroupData[{
 
+Cell["Cross-order coefficient", "Title",
+ CellChangeTimes->{{3.9084697860435953`*^9, 
+  3.908469789611486*^9}},ExpressionUUID->"953b852f-e1cf-4ba6-929b-\
+a9b3f16886cb"],
+
+Cell[BoxData[
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"\[Not]", 
+     RowBox[{
+     "FileExistsQ", "[", "\"\<To get cross-order coefficient.txt\>\"", 
+      "]"}]}], " ", "||", " ", 
+    RowBox[{"\[Not]", 
+     RowBox[{"FileExistsQ", "[", "\"\<Kernels.txt\>\"", "]"}]}]}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+    "Throw", "[", "\"\<The cross-order coefficient will not be computed\>\"", 
+     "]"}], ";"}], "\[IndentingNewLine]", ",", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"For", "[", 
+     RowBox[{
+      RowBox[{"counter", "=", "1"}], ",", 
+      RowBox[{"counter", "<=", "2"}], ",", 
+      RowBox[{"counter", "++"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"aux", "=", 
+        RowBox[{
+        "ReadLine", "[", "\"\<To get cross-order coefficient.txt\>\"", 
+         "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"aux2", "=", 
+        RowBox[{"ReadLine", "[", "\"\<Kernels.txt\>\"", "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"counter", "==", "1"}], ",", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"crosspar", "=", 
+           RowBox[{"FormattingStrings", "[", "aux", "]"}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"phiNF", "=", 
+           RowBox[{"FormattingStringsCommaSplit", "[", "aux2", "]"}]}], ";"}],
+          "\[IndentingNewLine]", ",", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"C11", "=", 
+           RowBox[{"FormattingStrings", "[", "aux", "]"}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"psiNF", "=", 
+           RowBox[{"FormattingStringsCommaSplit", "[", "aux2", "]"}]}], 
+          ";"}]}], "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", 
+     "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"Close", "[", "\"\<To get cross-order coefficient.txt\>\"", "]"}],
+     ";", "\[IndentingNewLine]", 
+    RowBox[{"Close", "[", "\"\<Kernels.txt\>\"", "]"}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"phiNF", "=", 
+     RowBox[{"ToExpression", "[", 
+      RowBox[{"phiNF", ",", "TeXForm"}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"psiNF", "=", 
+     RowBox[{"ToExpression", "[", 
+      RowBox[{"psiNF", ",", "TeXForm"}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"C11", "=", 
+     RowBox[{"C11", "/.", "eq"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"C11", "=", 
+     RowBox[{"D", "[", 
+      RowBox[{"C11", ",", "crosspar"}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"For", "[", 
+     RowBox[{
+      RowBox[{"varnum", "=", "0"}], ",", 
+      RowBox[{"varnum", "<=", 
+       RowBox[{"nvar", "-", "1"}]}], ",", 
+      RowBox[{"varnum", "++"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"C11", "=", 
+        RowBox[{"C11", "/.", 
+         RowBox[{
+          SuperscriptBox[
+           SubscriptBox["\[Phi]", 
+            RowBox[{"ToExpression", "[", 
+             RowBox[{
+              RowBox[{"ToString", "[", "varnum", "]"}], " ", "<>", " ", 
+              RowBox[{"ToString", "[", "varnum", "]"}]}], "]"}]], "NF"], "->", 
+          RowBox[{"phiNF", "[", 
+           RowBox[{"[", 
+            RowBox[{"varnum", "+", "1"}], "]"}], "]"}]}]}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"C11", "=", 
+        RowBox[{"C11", "/.", 
+         RowBox[{
+          SuperscriptBox[
+           SubscriptBox["\[Psi]", 
+            RowBox[{"ToExpression", "[", 
+             RowBox[{
+              RowBox[{"ToString", "[", "varnum", "]"}], " ", "<>", " ", 
+              RowBox[{"ToString", "[", "varnum", "]"}]}], "]"}]], "NF"], "->", 
+          RowBox[{"psiNF", "[", 
+           RowBox[{"[", 
+            RowBox[{"varnum", "+", "1"}], "]"}], "]"}]}]}]}], ";"}]}], 
+     "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", "]"}]], "Input",
+ CellChangeTimes->{
+  3.908470215481806*^9},ExpressionUUID->"56472fa9-c001-40bc-b59d-\
+1c659821f88d"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
 Cell["Changes of criticality and fifth-order coefficient", "Title",
  CellChangeTimes->{{3.8383017929569187`*^9, 3.838301808356631*^9}, 
    3.8390811661706953`*^9, {3.886372830577243*^9, 3.8863728402363176`*^9}, {
@@ -4875,7 +4982,7 @@ Cell[BoxData[{
              RowBox[{"[", "2", "]"}], "]"}]}], "}"}], ",", 
           RowBox[{"PlotStyle", "\[Rule]", 
            RowBox[{"{", 
-            RowBox[{"Orange", ",", "LightBlue", ",", 
+            RowBox[{"Orange", ",", "Magenta", ",", 
              RowBox[{"{", 
               RowBox[{"Black", ",", "Dotted"}], "}"}], ",", "Red", ",", 
              "Blue", ",", 
@@ -5429,7 +5536,7 @@ Cell[BoxData[{
              RowBox[{"[", "2", "]"}], "]"}]}], "}"}], ",", 
           RowBox[{"PlotStyle", "\[Rule]", 
            RowBox[{"{", 
-            RowBox[{"Orange", ",", "LightBlue", ",", 
+            RowBox[{"Orange", ",", "Magenta", ",", 
              RowBox[{"{", 
               RowBox[{"Black", ",", "Dotted"}], "}"}], ",", "Red", ",", 
              "Blue", ",", 
@@ -6212,17 +6319,18 @@ Cell[BoxData[{
    3.903094053266201*^9, 3.9030941328785825`*^9}, {3.903094170263666*^9, 
    3.9030942074037313`*^9}, {3.903103307719746*^9, 3.903103564551602*^9}, {
    3.9031167091988935`*^9, 3.9031167155677395`*^9}, {3.9032043167407923`*^9, 
-   3.9032043368453054`*^9}},ExpressionUUID->"7f0bdfc8-c8b7-4f06-9635-\
+   3.9032043368453054`*^9}, {3.9104657340408864`*^9, 
+   3.910465742642192*^9}},ExpressionUUID->"7f0bdfc8-c8b7-4f06-9635-\
 3f6fa686187c"]
 }, Closed]]
 },
 CellGrouping->Manual,
-WindowSize->{1141.2, 574.8},
+WindowSize->{1428, 735.75},
 WindowMargins->{{0, Automatic}, {Automatic, 0}},
 TaggingRules->{
  "WelcomeScreenSettings" -> {"FEStarting" -> False}, "TryRealOnly" -> False},
 Magnification:>1.4 Inherited,
-FrontEndVersion->"13.3 for Microsoft Windows (64-bit) (July 24, 2023)",
+FrontEndVersion->"13.3 for Microsoft Windows (64-bit) (June 3, 2023)",
 StyleDefinitions->"Default.nb",
 ExpressionUUID->"4135b81b-477c-4422-95ff-d7aca60094b6"
 ]
@@ -6250,7 +6358,7 @@ Cell[16093, 394, 300, 4, 183, "Title",ExpressionUUID->"6b1368fc-8535-487b-a757-1
 Cell[16396, 400, 9761, 227, 1612, "Input",ExpressionUUID->"47b09d0b-e895-4096-b07a-c4c7a19e5112"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[26194, 632, 244, 4, 183, "Title",ExpressionUUID->"a4bdec2e-f6d4-4657-b8b4-76183b2ecf81"],
+Cell[26194, 632, 244, 4, 98, "Title",ExpressionUUID->"a4bdec2e-f6d4-4657-b8b4-76183b2ecf81"],
 Cell[26441, 638, 4807, 114, 733, "Input",ExpressionUUID->"47f29af5-90a6-416b-851b-bc0d861fff99"]
 }, Closed]],
 Cell[CellGroupData[{
@@ -6258,12 +6366,16 @@ Cell[31285, 757, 214, 4, 98, "Title",ExpressionUUID->"ea7c5508-ed79-43b1-a153-1c
 Cell[31502, 763, 79711, 1744, 5034, "Input",ExpressionUUID->"9919ef6e-2978-4802-bd05-8061f7920bda"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[111250, 2512, 326, 5, 183, "Title",ExpressionUUID->"741eb1d1-ecb6-4601-bec9-e01c0e2cd7d8"],
-Cell[111579, 2519, 83945, 1802, 5474, "Input",ExpressionUUID->"fb8b154a-015f-45ba-964e-1aa654390a6e"]
+Cell[111250, 2512, 168, 3, 98, "Title",ExpressionUUID->"953b852f-e1cf-4ba6-929b-a9b3f16886cb"],
+Cell[111421, 2517, 3932, 97, 697, "Input",ExpressionUUID->"56472fa9-c001-40bc-b59d-1c659821f88d"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[195561, 4326, 224, 4, 98, "Title",ExpressionUUID->"335983e1-ddfc-4628-a13f-400ae567ecbb"],
-Cell[195788, 4332, 82771, 1883, 5048, "Input",ExpressionUUID->"7f0bdfc8-c8b7-4f06-9635-3f6fa686187c"]
+Cell[115390, 2619, 326, 5, 98, "Title",ExpressionUUID->"741eb1d1-ecb6-4601-bec9-e01c0e2cd7d8"],
+Cell[115719, 2626, 83945, 1802, 5474, "Input",ExpressionUUID->"fb8b154a-015f-45ba-964e-1aa654390a6e"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[199701, 4433, 224, 4, 98, "Title",ExpressionUUID->"335983e1-ddfc-4628-a13f-400ae567ecbb"],
+Cell[199928, 4439, 82819, 1884, 4089, "Input",ExpressionUUID->"7f0bdfc8-c8b7-4f06-9635-3f6fa686187c"]
 }, Closed]]
 }
 ]

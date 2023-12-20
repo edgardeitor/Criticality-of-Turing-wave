@@ -388,7 +388,6 @@ W04NF = Vector('W04^NF')
 W24NF = Vector('W24^NF')
 W031NF = Vector('W031^NF')
 W231NF = Vector('W231^NF')
-W2231NF = Vector('W2231^NF')
 W022NF = Vector('W022^NF')
 W222NF = Vector('W222^NF')
 
@@ -466,10 +465,14 @@ print('Second-order ready')
 DS_phi11W02 = secondorderapplied(phi11NF, W02NF)
 DS_conjphi11W22 = secondorderapplied(phi11NF.conj, W22NF)
 
+# DS_phi11conjW011 = secondorderapplied(phi11NF, W011NF.conj)
 DS_conjphi11W011 = secondorderapplied(phi11NF.conj, W011NF)
+# DS_conjphi11W02 = secondorderapplied(phi11NF.conj, W02NF)
 DS_phi11W211 = secondorderapplied(phi11NF, W211NF)
+# DS_conjphi11W211 = secondorderapplied(phi11NF.conj, W211NF)
 
 TS_phi11phi11conjphi11 = thirdorderapplied(phi11NF, phi11NF, phi11NF.conj)
+# TS_phi11conjphi11conjphi11 = thirdorderapplied(phi11NF, phi11NF.conj, phi11NF.conj)
 
 Tcoefsubmatrix = matrix('Tdummysubmatrix', nvar - 1, transpose(invertiblesubmatrix))
 Tcoefmat11 = matrix('Tcoefmat', nvar, transpose(coefmat11.actualcoord))
@@ -485,11 +488,38 @@ C130 = Mul(Pow(denominator, -1), psi11NF.dummy.dot(Add(Mul(4, DS_phi11W02), Mul(
 
 C112 = Mul(Pow(denominator, -1),
            psi11NF.dummy.dot(Add(Mul(2, DS_conjphi11W011), Mul(4, DS_phi11W02), Mul(2, DS_phi11W211),
-                                 Mul(6, TS_phi11phi11conjphi11))))
+                                Mul(6, TS_phi11phi11conjphi11))))
     
 C130conj = conjugate(C130)
 
 C112conj = conjugate(C112)
+
+if crosscoef=='y':
+    try:    
+        crosspar = eval(crosspar)
+        
+        pre_C11 = Mul(Pow(denominator, -1),
+                      psi11NF.dummy.dot(Mul(Add(jacobianmat, Mul(- muNF, diffmatrix)), phi11NF.dummy)))
+        
+        file = open('Kernels.txt', 'w')
+        for varnum in range(nvar):
+            if varnum<nvar - 1:
+                file.write(latex(phi11NF.actualcoord[varnum]) + ',')
+            else:
+                file.write(latex(phi11NF.actualcoord[varnum]) + '\n')
+        for varnum in range(nvar):
+            if varnum<nvar - 1:
+                file.write(latex(psi11NF.actualcoord[varnum]) + ',')
+            else:
+                file.write(latex(psi11NF.actualcoord[varnum]))
+        file.close()
+
+        file = open('To get cross-order coefficient.txt', 'w')
+        file.write(latex(crosspar) + '\n')
+        file.write(latex(pre_C11))
+        file.close()
+    except:
+        print('The parameter crosspar is not a parameter of the system.')
 
 if fifthcoef=='y':
     DS_phi11W22 = secondorderapplied(phi11NF, W22NF)
@@ -506,11 +536,11 @@ if fifthcoef=='y':
     if orthogonal=='y':
         if phiunit=='y':
             W13NF.actualcoord = Add(W13NF.actualcoord, Mul(-1, W13NF.actualcoord.dot(phi11NF.conj.dummy),
-                                                           phi11NF.dummy))
+                                                            phi11NF.dummy))
         else:
             W13NF.actualcoord = Add(W13NF.actualcoord, Mul(-1, W13NF.actualcoord.dot(phi11NF.conj.dummy),
-                                                           Pow(phi11NF.dummy.dot(phi11NF.conj.dummy), -1),
-                                                           phi11NF.dummy))
+                                                            Pow(phi11NF.dummy.dot(phi11NF.conj.dummy), -1),
+                                                            phi11NF.dummy))
     
     negativeRHS.actualcoord = Add(Mul(-1, C112, phi11NF.dummy), Mul(2, DS_conjphi11W011), Mul(4, DS_phi11W02),
                                   Mul(2, DS_phi11W211), Mul(6, TS_phi11phi11conjphi11))
@@ -587,7 +617,7 @@ if fifthcoef=='y':
     Q4S_phi11phi11conjphi11conjphi11 = fourthorderapplied(phi11NF, phi11NF, phi11NF.conj, phi11NF.conj)
     Q4S_phi11phi11phi11conjphi11 = fourthorderapplied(phi11NF, phi11NF, phi11NF, phi11NF.conj)
     
-    negativeRHS.actualcoord = Add(Mul(-1, Add(C130, C130conj), W02NF.dummy), Mul(2, DS_W02W02),
+    negativeRHS.actualcoord = Add(Mul(-2, C130, W02NF.dummy), Mul(2, DS_W02W02),
                                   DS_W22conjW22, Mul(2, DS_phi11conjW13),
                                   Mul(3, TS_phi11phi11conjW22), Mul(6, TS_phi11conjphi11W02),
                                   Mul(3, Q4S_phi11phi11conjphi11conjphi11))
@@ -617,7 +647,7 @@ if fifthcoef=='y':
     
     W231NF = linearsolver(W231NF, negativeRHS, coefmat20)
     
-    negativeRHS.actualcoord = Add(Mul(-2, Add(C112, C112conj), W02NF.dummy), Mul(4, DS_W02W02),
+    negativeRHS.actualcoord = Add(Mul(-4, C112, W02NF.dummy), Mul(4, DS_W02W02),
                                   DS_W211W211, DS_W011conjW011, Mul(4, DS_phi11conjW121),
                                   Mul(12, TS_phi11conjphi11W02), Mul(6, TS_phi11conjphi11W211),
                                   Mul(6, TS_phi11phi11conjW011), Mul(12, Q4S_phi11phi11conjphi11conjphi11))
@@ -702,49 +732,49 @@ if fifthcoef=='y':
     Q5S_phi11phi11phi11conjphi11conjphi11 = fifthorderapplied(phi11NF, phi11NF, phi11NF, phi11NF.conj, phi11NF.conj)
         
     C150 = Mul(Pow(denominator, -1),
-               psi11NF.dummy.dot(Add(Mul(-1, Add(Mul(2, C130), C130conj), W13NF.dummy),
-                                     Mul(2, DS_phi11W04), Mul(2, DS_phi11conjW04), Mul(2, DS_conjphi11W24),
-                                     Mul(4, DS_W02W13), Mul(2, DS_W22conjW13), Mul(2, DS_conjW22W33),
-                                     Mul(12, TS_phi11W02W02), Mul(6, TS_phi11W22conjW22),
-                                     Mul(12, TS_conjphi11W02W22), Mul(3, TS_phi11phi11conjW13),
-                                     Mul(6, TS_phi11conjphi11W13), Mul(3, TS_conjphi11conjphi11W33),
-                                     Mul(4, Q4S_phi11phi11phi11conjW22), Mul(24, Q4S_phi11phi11conjphi11W02),
-                                     Mul(12, Q4S_phi11conjphi11conjphi11W22),
-                                     Mul(10, Q5S_phi11phi11phi11conjphi11conjphi11))))
+                psi11NF.dummy.dot(Add(Mul(-1, Add(Mul(2, C130), C130conj), W13NF.dummy),
+                                      Mul(2, DS_phi11W04), Mul(2, DS_phi11conjW04), Mul(2, DS_conjphi11W24),
+                                      Mul(4, DS_W02W13), Mul(2, DS_W22conjW13), Mul(2, DS_conjW22W33),
+                                      Mul(12, TS_phi11W02W02), Mul(6, TS_phi11W22conjW22),
+                                      Mul(12, TS_conjphi11W02W22), Mul(3, TS_phi11phi11conjW13),
+                                      Mul(6, TS_phi11conjphi11W13), Mul(3, TS_conjphi11conjphi11W33),
+                                      Mul(4, Q4S_phi11phi11phi11conjW22), Mul(24, Q4S_phi11phi11conjphi11W02),
+                                      Mul(12, Q4S_phi11conjphi11conjphi11W22),
+                                      Mul(10, Q5S_phi11phi11phi11conjphi11conjphi11))))
     
     C114 = Mul(Pow(denominator, -1),
-               psi11NF.dummy.dot(Add(Mul(-1, Add(C112, C130, C130conj), W121NF.dummy),
-                                     Mul(2, DS_phi11W04), Mul(2, DS_phi11conjW04), Mul(2, DS_phi11conjW231),
-                                     Mul(2, DS_conjphi11W031), Mul(4, DS_W02W121), Mul(2, DS_conjW22W1221),
-                                     Mul(2, DS_W22conjW321), Mul(2, DS_W13W211), Mul(2, DS_conjW13W011),
-                                     Mul(12, Add(TS_phi11W02W02, TS_phi11W02W211)), Mul(6, TS_phi11conjW22W22),
-                                     Mul(6, TS_phi11conjW22W011), Mul(12, TS_conjphi11W02W011),
-                                     Mul(6, TS_conjphi11W22W211), Mul(6, Add(TS_phi11conjphi11W13,
-                                     TS_phi11conjphi11W121)), Mul(3, TS_conjphi11conjphi11W1221),
-                                     Mul(6, TS_phi11phi11conjW13), Mul(3, TS_phi11phi11conjW321),
-                                     Mul(48, Q4S_phi11phi11conjphi11W02), Mul(12, Q4S_phi11phi11conjphi11W211),
-                                     Mul(12, Q4S_phi11phi11phi11conjW22),
-                                     Mul(12, Add(Q4S_phi11conjphi11conjphi11W22, Q4S_phi11conjphi11conjphi11W011)),
-                                     Mul(30, Q5S_phi11phi11phi11conjphi11conjphi11))))
+                psi11NF.dummy.dot(Add(Mul(-1, Add(C112, C130, C130conj), W121NF.dummy),
+                                      Mul(2, DS_phi11W04), Mul(2, DS_phi11conjW04), Mul(2, DS_phi11conjW231),
+                                      Mul(2, DS_conjphi11W031), Mul(4, DS_W02W121), Mul(2, DS_conjW22W1221),
+                                      Mul(2, DS_W22conjW321), Mul(2, DS_W13W211), Mul(2, DS_conjW13W011),
+                                      Mul(12, Add(TS_phi11W02W02, TS_phi11W02W211)), Mul(6, TS_phi11conjW22W22),
+                                      Mul(6, TS_phi11conjW22W011), Mul(12, TS_conjphi11W02W011),
+                                      Mul(6, TS_conjphi11W22W211), Mul(6, Add(TS_phi11conjphi11W13,
+                                      TS_phi11conjphi11W121)), Mul(3, TS_conjphi11conjphi11W1221),
+                                      Mul(6, TS_phi11phi11conjW13), Mul(3, TS_phi11phi11conjW321),
+                                      Mul(48, Q4S_phi11phi11conjphi11W02), Mul(12, Q4S_phi11phi11conjphi11W211),
+                                      Mul(12, Q4S_phi11phi11phi11conjW22),
+                                      Mul(12, Add(Q4S_phi11conjphi11conjphi11W22, Q4S_phi11conjphi11conjphi11W011)),
+                                      Mul(30, Q5S_phi11phi11phi11conjphi11conjphi11))))
         
     C132 = Mul(Pow(denominator, -1),
-               psi11NF.dummy.dot(Add(Mul(-1, Add(C130, C112, C112conj), W121NF.dummy),
-                                     Mul(-1, Add(Mul(2, C112), C112conj), W13NF.dummy), Mul(2, DS_phi11W022),
-                                     Mul(2, DS_phi11conjW022), Mul(2, DS_phi11W231), Mul(2, DS_conjphi11W222),
-                                     Mul(2, DS_conjphi11W031), Mul(4, DS_W02W121), Mul(2, DS_conjW121W22),
-                                     Mul(2, DS_conjW121W011), Mul(2, DS_W211W121), Mul(2, DS_W211W321),
-                                     Mul(2, DS_conjW011W1221), Mul(4, DS_W02W13), Mul(6, TS_phi11W211W211),
-                                     Mul(6, TS_phi11conjW011W22), Mul(6, TS_phi11conjW011W011),
-                                     Mul(12, Add(TS_conjphi11W02W22, TS_conjphi11W02W011)),
-                                     Mul(6, Add(TS_conjphi11W211W22, TS_conjphi11W211W011)),
-                                     Mul(12, Add(Mul(2, TS_phi11W02W02), TS_phi11W02W211)),
-                                     Mul(9, TS_phi11phi11conjW121), Mul(6, TS_phi11conjphi11W13),
-                                     Mul(12, TS_phi11conjphi11W121), Mul(6, TS_phi11conjphi11W321),
-                                     Mul(6, TS_conjphi11conjphi11W1221),
-                                     Mul(36, Add(Mul(2, Q4S_phi11phi11conjphi11W02), Q4S_phi11phi11conjphi11W211)),
-                                     Mul(12, Q4S_phi11phi11phi11conjW011),
-                                     Mul(24, Q4S_phi11conjphi11conjphi11W22), Mul(24, Q4S_phi11conjphi11conjphi11W011),
-                                     Mul(60, Q5S_phi11phi11phi11conjphi11conjphi11))))
+                psi11NF.dummy.dot(Add(Mul(-1, Add(C130, C112, C112conj), W121NF.dummy),
+                                      Mul(-1, Add(Mul(2, C112), C112conj), W13NF.dummy), Mul(2, DS_phi11W022),
+                                      Mul(2, DS_phi11conjW022), Mul(2, DS_phi11W231), Mul(2, DS_conjphi11W222),
+                                      Mul(2, DS_conjphi11W031), Mul(4, DS_W02W121), Mul(2, DS_conjW121W22),
+                                      Mul(2, DS_conjW121W011), Mul(2, DS_W211W121), Mul(2, DS_W211W321),
+                                      Mul(2, DS_conjW011W1221), Mul(4, DS_W02W13), Mul(6, TS_phi11W211W211),
+                                      Mul(6, TS_phi11conjW011W22), Mul(6, TS_phi11conjW011W011),
+                                      Mul(12, Add(TS_conjphi11W02W22, TS_conjphi11W02W011)),
+                                      Mul(6, Add(TS_conjphi11W211W22, TS_conjphi11W211W011)),
+                                      Mul(12, Add(Mul(2, TS_phi11W02W02), TS_phi11W02W211)),
+                                      Mul(9, TS_phi11phi11conjW121), Mul(6, TS_phi11conjphi11W13),
+                                      Mul(12, TS_phi11conjphi11W121), Mul(6, TS_phi11conjphi11W321),
+                                      Mul(6, TS_conjphi11conjphi11W1221),
+                                      Mul(36, Add(Mul(2, Q4S_phi11phi11conjphi11W02), Q4S_phi11phi11conjphi11W211)),
+                                      Mul(12, Q4S_phi11phi11phi11conjW011),
+                                      Mul(24, Q4S_phi11conjphi11conjphi11W22), Mul(24, Q4S_phi11conjphi11conjphi11W011),
+                                      Mul(60, Q5S_phi11phi11phi11conjphi11conjphi11))))
     
     print('The calculation of the fifth-order coefficients was carried out successfully. ' +
           'The saving process could take longer.')
@@ -765,11 +795,11 @@ C130 = C130.subs(psi11NF_eval)
 C112 = C112.subs(phi11NF_eval)
 C112 = C112.subs(psi11NF_eval)
     
-file=open('Third-order coefficient C130.txt','w')
+file = open('Third-order coefficient C130.txt', 'w')
 file.write(latex(C130))
 file.close()
 
-file=open('Third-order coefficient C112.txt','w')
+file = open('Third-order coefficient C112.txt', 'w')
 file.write(latex(C112))
 file.close()
 

@@ -30,7 +30,7 @@ class matrix:
                     
 def dummyvareval(vector, negativeRHS, coefmat):
     for row in range(nvar):
-        vector = vector.subs(negativeRHS.dummy[row],negativeRHS.actualcoord[row])
+        vector = vector.subs(negativeRHS.dummy[row], negativeRHS.actualcoord[row])
         for col in range(nvar):
             vector = vector.subs(coefmat.dummy[row, col], coefmat.actualcoord[row, col])
     return vector
@@ -42,11 +42,11 @@ def linearsolver(vector, negativeRHS, coefmat):
     return vector
                     
 def crossorderapplied(u, parameter, equilibrium):
-    SS = zeros(nvar,1)
+    SS = zeros(nvar, 1)
     firstordereval = firstorderderivatives
     for counter1 in range(nvar):
         for counter2 in range(nvar):
-            firstordereval[counter1] = Matrix(firstordereval[counter1]).subs(var[counter2],equilibrium[counter2])
+            firstordereval[counter1] = Matrix(firstordereval[counter1]).subs(var[counter2], equilibrium[counter2])
     for counter1 in range(nvar):
         SS = Add(SS, Mul(u[counter1], diff(firstordereval[counter1], parameter)))
     return SS
@@ -114,9 +114,9 @@ def kernel_determination(vector, coefmat, criticalcol, coefsubmatrix, submatrixr
 def critical_linearsolver(vector, negativeRHS, criticalcol, coefsubmatrix, submatrixrows, submatrixcols):
     vector.actualcoord[criticalcol] = 0
     
-    auxiliaryterm, = linsolve(Add(Mul(coefsubmatrix.dummy,Matrix(vector.actualcoord).extract(submatrixcols,[0])),
-                                  negativeRHS.dummy.extract(submatrixrows,[0])),
-                              list(Matrix(vector.actualcoord).extract(submatrixcols,[0])))
+    auxiliaryterm, = linsolve(Add(Mul(coefsubmatrix.dummy, Matrix(vector.actualcoord).extract(submatrixcols, [0])),
+                                  negativeRHS.dummy.extract(submatrixrows, [0])),
+                              list(Matrix(vector.actualcoord).extract(submatrixcols, [0])))
         
     vector.actualcoord[0:criticalcol] = auxiliaryterm[0:criticalcol]
     vector.actualcoord[criticalcol+1:nvar] = auxiliaryterm[criticalcol:nvar-1]

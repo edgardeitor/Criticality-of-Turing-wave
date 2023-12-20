@@ -22,9 +22,9 @@ tol=1e-7
 
 phiunit='n'
 
-crosscoef='n'
+crosscoef='y'
 
-crosspar=''
+crosspar='k1'
 
 equilibrium=[]
 
