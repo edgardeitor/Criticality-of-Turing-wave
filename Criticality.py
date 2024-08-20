@@ -62,8 +62,8 @@ if npar>0:
     newparameters=dict()
     for key in parameters.keys():
         try:
-            exec(key + ' = symbols(key, real=True)')
-            newparameters[eval(key)]=parameters[key]
+            exec(key + ' = symbols(key, real = True)')
+            newparameters[eval(key)] = parameters[key]
         except:
             print('The script could not define your variable ' + key + ' as a variable')
             exit()
@@ -78,7 +78,7 @@ except:
 try:
     for row in range(nvar):
         for col in range(nvar):
-            diffmatrix[row][col] = eval(str(diffmatrix[row][col]).replace('^','**'))
+            diffmatrix[row][col] = eval(str(diffmatrix[row][col]).replace('^', '**'))
 except:
     print('The diffusion matrix is not a function of the parameters of the system')
     exit()
@@ -155,28 +155,47 @@ if isinstance(eq,list) and len(eq)>1:
     eq=Matrix(list(eq[eqnumber-1]))        
 elif isinstance(eq,list) and len(eq)==1:
     print('Your system has only one equilibrium point given by:')
-    eqnumber=0
+    eqnumber = 0
     print(eq[0])
-    eq=Matrix(eq[0])
+    eq = Matrix(eq[0])
 
 # Wave conditions
 
-muNF = symbols('mu_NF', real=True)
-omegaNF = symbols('omega_NF', real=True)
+muNF = symbols('mu_NF', real = True)
+omegaNF = symbols('omega_NF', real = True)
 
-dummyrealpart = symbols('dummyrealpart', real=True)
+dummyrealpart = symbols('dummyrealpart', real = True)
 
-coefmat00 = matrix('coefmat00', nvar, jacobianmat)
-coefmat11 = matrix('coefmat11', nvar, Add(jacobianmat,Mul(-1, muNF, diffmatrix), Mul(-1, dummyrealpart, eye(nvar)),
-                                      Mul(-1, I, omegaNF, eye(nvar))))
-coefmat02 = matrix('coefmat02', nvar, Add(jacobianmat, Mul(-2, I, omegaNF, eye(nvar))))
-coefmat20 = matrix('coefmat20', nvar, Add(jacobianmat, Mul(-4, muNF, diffmatrix)))
-coefmat22 = matrix('coefmat22', nvar, Add(jacobianmat, Mul(-4, muNF, diffmatrix), Mul(-2, I, omegaNF, eye(nvar))))
-coefmat33 = matrix('coefmat33', nvar, Add(jacobianmat, Mul(-9, muNF, diffmatrix), Mul(-3, I, omegaNF, eye(nvar))))
-coefmat31 = matrix('coefmat31', nvar, Add(jacobianmat, Mul(-9, muNF, diffmatrix), Mul(-1, I, omegaNF, eye(nvar))))
-coefmat13 = matrix('coefmat13', nvar, Add(jacobianmat, Mul(-1, muNF, diffmatrix), Mul(-3, I, omegaNF, eye(nvar))))
-coefmat04 = matrix('coefmat04', nvar, Add(jacobianmat, Mul(-4, I, omegaNF, eye(nvar))))
-coefmat24 = matrix('coefmat24', nvar, Add(jacobianmat, Mul(-4, muNF, diffmatrix), Mul(-4, I, omegaNF, eye(nvar))))
+for counter1 in range(4):
+    if counter1%2==0:
+        second_set = range(0, 5, 2)
+    else:
+        second_set = range(1, 4, 2)
+    for counter2 in second_set:
+        if counter1==1 and counter2==1:
+            coefmat11 = matrix('coefmat11', nvar, Add(jacobianmat, Mul(- 1, muNF, diffmatrix),
+                                                      Mul(- 1, dummyrealpart, eye(nvar)),
+                                                      Mul(- 1, I, omegaNF, eye(nvar))))
+        else:
+            exec(f'coefmat{counter1}{counter2} = matrix("coefmat{counter1}{counter2}", nvar, Add(jacobianmat, Mul(- Pow({counter1}, 2), muNF, diffmatrix), Mul(- {counter2}, I, omegaNF, eye(nvar))))')
+
+# coefmat00 = matrix('coefmat00', nvar, jacobianmat)
+# coefmat11 = matrix('coefmat11', nvar, Add(jacobianmat, Mul(- 1, muNF, diffmatrix),
+#                                           Mul(- 1, dummyrealpart, eye(nvar)),
+#                                           Mul(- 1, I, omegaNF, eye(nvar))))
+# coefmat02 = matrix('coefmat02', nvar, Add(jacobianmat, Mul(- 2, I, omegaNF, eye(nvar))))
+# coefmat20 = matrix('coefmat20', nvar, Add(jacobianmat, Mul(- 4, muNF, diffmatrix)))
+# coefmat22 = matrix('coefmat22', nvar, Add(jacobianmat, Mul(- 4, muNF, diffmatrix),
+#                                           Mul(-2, I, omegaNF, eye(nvar))))
+# coefmat33 = matrix('coefmat33', nvar, Add(jacobianmat, Mul(- 9, muNF, diffmatrix),
+#                                           Mul(- 3, I, omegaNF, eye(nvar))))
+# coefmat31 = matrix('coefmat31', nvar, Add(jacobianmat, Mul(- 9, muNF, diffmatrix),
+#                                           Mul(- 1, I, omegaNF, eye(nvar))))
+# coefmat13 = matrix('coefmat13', nvar, Add(jacobianmat, Mul(- 1, muNF, diffmatrix),
+#                                           Mul(- 3, I, omegaNF, eye(nvar))))
+# coefmat04 = matrix('coefmat04', nvar, Add(jacobianmat, Mul(- 4, I, omegaNF, eye(nvar))))
+# coefmat24 = matrix('coefmat24', nvar, Add(jacobianmat, Mul(- 4, muNF, diffmatrix),
+#                                           Mul(- 4, I, omegaNF, eye(nvar))))
 
 jacobianmatdet = coefmat11.dummy.det()
 
@@ -315,7 +334,7 @@ derivativeeval = realdeterminantderivative
 #                     while not isfloat(kval):
 #                         kval = input('What you entered before is not a number. Enter a value of k you want to consider: ')
 #                     kval = eval(kval)
-#                     ksquared = Pow(kval,2)
+#                     ksquared = Pow(kval, 2)
 # else:
 #     ksquared = 0
 
@@ -369,27 +388,23 @@ for counter1 in range(nvar):
                     fifthorderderivatives[counter1][counter2][counter3][counter4].append(
                         diff(fourthorderderivatives[counter1][counter2][counter3][counter4], var[counter5]))
 
-phi11NF = Vector('phi11^NF')
-
-W02NF = Vector('W02^NF')
-W22NF = Vector('W22^NF')
-W011NF = Vector('W011^NF')
-W211NF = Vector('W211^NF')
-
-psi11NF = Vector('psi11^NF')
-
-W13NF = Vector('W13^NF')
-W33NF = Vector('W33^NF')
-W121NF = Vector('W121^NF')
-W1221NF = Vector('W1221^NF')
-W321NF = Vector('W321^NF')
-
-W04NF = Vector('W04^NF')
-W24NF = Vector('W24^NF')
-W031NF = Vector('W031^NF')
-W231NF = Vector('W231^NF')
-W022NF = Vector('W022^NF')
-W222NF = Vector('W222^NF')
+phi11NF = Vector('phi11NF')
+psi11NF = Vector('psi11NF')
+W02NF = Vector('W02NF')
+W22NF = Vector('W22NF')
+W011NF = Vector('W011NF')
+W211NF = Vector('W211NF')
+W13NF = Vector('W13NF')
+W33NF = Vector('W33NF')
+W121NF = Vector('W121NF')
+W1221NF = Vector('W1221NF')
+W321NF = Vector('W321NF')
+W04NF = Vector('W04NF')
+W24NF = Vector('W24NF')
+W031NF = Vector('W031NF')
+W231NF = Vector('W231NF')
+W022NF = Vector('W022NF')
+W222NF = Vector('W222NF')
 
 getout = 0
 
@@ -460,19 +475,15 @@ W22NF_eval = evaluation_dict(W22NF)
 W011NF_eval = evaluation_dict(W011NF)
 W211NF_eval = evaluation_dict(W211NF)
         
-print('Second-order ready')
+print('Second order ready')
 
 DS_phi11W02 = secondorderapplied(phi11NF, W02NF)
 DS_conjphi11W22 = secondorderapplied(phi11NF.conj, W22NF)
 
-# DS_phi11conjW011 = secondorderapplied(phi11NF, W011NF.conj)
 DS_conjphi11W011 = secondorderapplied(phi11NF.conj, W011NF)
-# DS_conjphi11W02 = secondorderapplied(phi11NF.conj, W02NF)
 DS_phi11W211 = secondorderapplied(phi11NF, W211NF)
-# DS_conjphi11W211 = secondorderapplied(phi11NF.conj, W211NF)
 
 TS_phi11phi11conjphi11 = thirdorderapplied(phi11NF, phi11NF, phi11NF.conj)
-# TS_phi11conjphi11conjphi11 = thirdorderapplied(phi11NF, phi11NF.conj, phi11NF.conj)
 
 Tcoefsubmatrix = matrix('Tdummysubmatrix', nvar - 1, transpose(invertiblesubmatrix))
 Tcoefmat11 = matrix('Tcoefmat', nvar, transpose(coefmat11.actualcoord))
@@ -501,18 +512,18 @@ if crosscoef=='y':
         pre_C11 = Mul(Pow(denominator, -1),
                       psi11NF.dummy.dot(Mul(Add(jacobianmat, Mul(- muNF, diffmatrix)), phi11NF.dummy)))
         
-        file = open('Kernels.txt', 'w')
-        for varnum in range(nvar):
-            if varnum<nvar - 1:
-                file.write(latex(phi11NF.actualcoord[varnum]) + ',')
-            else:
-                file.write(latex(phi11NF.actualcoord[varnum]) + '\n')
-        for varnum in range(nvar):
-            if varnum<nvar - 1:
-                file.write(latex(psi11NF.actualcoord[varnum]) + ',')
-            else:
-                file.write(latex(psi11NF.actualcoord[varnum]))
-        file.close()
+        # file = open('Kernels.txt', 'w')
+        # for varnum in range(nvar):
+        #     if varnum<nvar - 1:
+        #         file.write(latex(phi11NF.actualcoord[varnum]) + ',')
+        #     else:
+        #         file.write(latex(phi11NF.actualcoord[varnum]) + '\n')
+        # for varnum in range(nvar):
+        #     if varnum<nvar - 1:
+        #         file.write(latex(psi11NF.actualcoord[varnum]) + ',')
+        #     else:
+        #         file.write(latex(psi11NF.actualcoord[varnum]))
+        # file.close()
 
         file = open('To get cross-order coefficient.txt', 'w')
         file.write(latex(crosspar) + '\n')
@@ -771,29 +782,33 @@ if fifthcoef=='y':
                                       Mul(9, TS_phi11phi11conjW121), Mul(6, TS_phi11conjphi11W13),
                                       Mul(12, TS_phi11conjphi11W121), Mul(6, TS_phi11conjphi11W321),
                                       Mul(6, TS_conjphi11conjphi11W1221),
-                                      Mul(36, Add(Mul(2, Q4S_phi11phi11conjphi11W02), Q4S_phi11phi11conjphi11W211)),
+                                      Mul(36, Add(Mul(2, Q4S_phi11phi11conjphi11W02),
+                                                  Q4S_phi11phi11conjphi11W211)),
                                       Mul(12, Q4S_phi11phi11phi11conjW011),
-                                      Mul(24, Q4S_phi11conjphi11conjphi11W22), Mul(24, Q4S_phi11conjphi11conjphi11W011),
+                                      Mul(24, Q4S_phi11conjphi11conjphi11W22),
+                                      Mul(24, Q4S_phi11conjphi11conjphi11W011),
                                       Mul(60, Q5S_phi11phi11phi11conjphi11conjphi11))))
     
-    print('The calculation of the fifth-order coefficients was carried out successfully. ' +
-          'The saving process could take longer.')
+    print('The calculation of the fifth-order coefficients was carried out successfully.')
     
-C130 = C130.subs(W02NF_eval)
-C130 = C130.subs(W22NF_eval)
-C130 = C130.subs(W011NF_eval)
-C130 = C130.subs(W211NF_eval)
+# C130 = C130.subs(W02NF_eval)
+# C130 = C130.subs(W22NF_eval)
+# C130 = C130.subs(W011NF_eval)
+# C130 = C130.subs(W211NF_eval)
 
-C112 = C112.subs(W02NF_eval)
-C112 = C112.subs(W22NF_eval)
-C112 = C112.subs(W011NF_eval)
-C112 = C112.subs(W211NF_eval)
+# C112 = C112.subs(W02NF_eval)
+# C112 = C112.subs(W22NF_eval)
+# C112 = C112.subs(W011NF_eval)
+# C112 = C112.subs(W211NF_eval)
 
-C130 = C130.subs(phi11NF_eval)
-C130 = C130.subs(psi11NF_eval)
+# C130 = C130.subs(phi11NF_eval)
+# C130 = C130.subs(psi11NF_eval)
 
-C112 = C112.subs(phi11NF_eval)
-C112 = C112.subs(psi11NF_eval)
+# C112 = C112.subs(phi11NF_eval)
+# C112 = C112.subs(psi11NF_eval)
+
+C130 = simplify(C130)
+C112 = simplify(C112)
     
 file = open('Third-order coefficient C130.txt', 'w')
 file.write(latex(C130))
@@ -803,73 +818,98 @@ file = open('Third-order coefficient C112.txt', 'w')
 file.write(latex(C112))
 file.close()
 
+file = open('Vectors.txt', 'w')
+write_vector(phi11NF, file)
+write_vector(psi11NF, file)
+write_vector(W02NF, file)
+write_vector(W22NF, file)
+write_vector(W011NF, file)
+write_vector(W211NF, file)
+file.close()
+
 print('The third-order coefficients were computed and saved into text files.')
     
 if fifthcoef=='n':
     print('Everything but the fifth-order coefficients was computed and saved into files.')
 elif fifthcoef=='y':
-    C150 = C150.subs(W04NF_eval)
-    C150 = C150.subs(W24NF_eval)
-    C150 = C150.subs(W031NF_eval)
-    C150 = C150.subs(W231NF_eval)
-    C150 = C150.subs(W022NF_eval)
-    C150 = C150.subs(W222NF_eval)
+    file = open('Vectors.txt', 'a')
+    write_vector(W13NF, file)
+    write_vector(W33NF, file)
+    write_vector(W121NF, file)
+    write_vector(W1221NF, file)
+    write_vector(W321NF, file)
     
-    C114 = C114.subs(W04NF_eval)
-    C114 = C114.subs(W24NF_eval)
-    C114 = C114.subs(W031NF_eval)
-    C114 = C114.subs(W231NF_eval)
-    C114 = C114.subs(W022NF_eval)
-    C114 = C114.subs(W222NF_eval)
+    write_vector(W04NF, file)
+    write_vector(W24NF, file)
+    write_vector(W031NF, file)
+    write_vector(W231NF, file)
+    write_vector(W022NF, file)
+    write_vector(W222NF, file)
     
-    C132 = C132.subs(W04NF_eval)
-    C132 = C132.subs(W24NF_eval)
-    C132 = C132.subs(W031NF_eval)
-    C132 = C132.subs(W231NF_eval)
-    C132 = C132.subs(W022NF_eval)
-    C132 = C132.subs(W222NF_eval)
+    file.close()
     
-    C150 = C150.subs(W13NF_eval)
-    C150 = C150.subs(W33NF_eval)
-    C150 = C150.subs(W121NF_eval)
-    C150 = C150.subs(W1221NF_eval)
-    C150 = C150.subs(W321NF_eval)
+    # C150 = C150.subs(W04NF_eval)
+    # C150 = C150.subs(W24NF_eval)
+    # C150 = C150.subs(W031NF_eval)
+    # C150 = C150.subs(W231NF_eval)
+    # C150 = C150.subs(W022NF_eval)
+    # C150 = C150.subs(W222NF_eval)
     
-    C114 = C114.subs(W13NF_eval)
-    C114 = C114.subs(W33NF_eval)
-    C114 = C114.subs(W121NF_eval)
-    C114 = C114.subs(W1221NF_eval)
-    C114 = C114.subs(W321NF_eval)
+    # C114 = C114.subs(W04NF_eval)
+    # C114 = C114.subs(W24NF_eval)
+    # C114 = C114.subs(W031NF_eval)
+    # C114 = C114.subs(W231NF_eval)
+    # C114 = C114.subs(W022NF_eval)
+    # C114 = C114.subs(W222NF_eval)
     
-    C132 = C132.subs(W13NF_eval)
-    C132 = C132.subs(W33NF_eval)
-    C132 = C132.subs(W121NF_eval)
-    C132 = C132.subs(W1221NF_eval)
-    C132 = C132.subs(W321NF_eval)
+    # C132 = C132.subs(W04NF_eval)
+    # C132 = C132.subs(W24NF_eval)
+    # C132 = C132.subs(W031NF_eval)
+    # C132 = C132.subs(W231NF_eval)
+    # C132 = C132.subs(W022NF_eval)
+    # C132 = C132.subs(W222NF_eval)
     
-    C150 = C150.subs(W02NF_eval)
-    C150 = C150.subs(W22NF_eval)
-    C150 = C150.subs(W011NF_eval)
-    C150 = C150.subs(W211NF_eval)
+    # C150 = C150.subs(W13NF_eval)
+    # C150 = C150.subs(W33NF_eval)
+    # C150 = C150.subs(W121NF_eval)
+    # C150 = C150.subs(W1221NF_eval)
+    # C150 = C150.subs(W321NF_eval)
     
-    C114 = C114.subs(W02NF_eval)
-    C114 = C114.subs(W22NF_eval)
-    C114 = C114.subs(W011NF_eval)
-    C114 = C114.subs(W211NF_eval)
+    # C114 = C114.subs(W13NF_eval)
+    # C114 = C114.subs(W33NF_eval)
+    # C114 = C114.subs(W121NF_eval)
+    # C114 = C114.subs(W1221NF_eval)
+    # C114 = C114.subs(W321NF_eval)
     
-    C132 = C132.subs(W02NF_eval)
-    C132 = C132.subs(W22NF_eval)
-    C132 = C132.subs(W011NF_eval)
-    C132 = C132.subs(W211NF_eval)
+    # C132 = C132.subs(W13NF_eval)
+    # C132 = C132.subs(W33NF_eval)
+    # C132 = C132.subs(W121NF_eval)
+    # C132 = C132.subs(W1221NF_eval)
+    # C132 = C132.subs(W321NF_eval)
     
-    C150 = C150.subs(phi11NF_eval)
-    C150 = C150.subs(psi11NF_eval)
+    # C150 = C150.subs(W02NF_eval)
+    # C150 = C150.subs(W22NF_eval)
+    # C150 = C150.subs(W011NF_eval)
+    # C150 = C150.subs(W211NF_eval)
     
-    C114 = C114.subs(phi11NF_eval)
-    C114 = C114.subs(psi11NF_eval)
+    # C114 = C114.subs(W02NF_eval)
+    # C114 = C114.subs(W22NF_eval)
+    # C114 = C114.subs(W011NF_eval)
+    # C114 = C114.subs(W211NF_eval)
     
-    C132 = C132.subs(phi11NF_eval)
-    C132 = C132.subs(psi11NF_eval)
+    # C132 = C132.subs(W02NF_eval)
+    # C132 = C132.subs(W22NF_eval)
+    # C132 = C132.subs(W011NF_eval)
+    # C132 = C132.subs(W211NF_eval)
+    
+    # C150 = C150.subs(phi11NF_eval)
+    # C150 = C150.subs(psi11NF_eval)
+    
+    # C114 = C114.subs(phi11NF_eval)
+    # C114 = C114.subs(psi11NF_eval)
+    
+    # C132 = C132.subs(phi11NF_eval)
+    # C132 = C132.subs(psi11NF_eval)
     
     file = open('Fifth-order coefficient C150.txt','w')
     file.write(latex(C150))
