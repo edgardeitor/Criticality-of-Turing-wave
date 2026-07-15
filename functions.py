@@ -10,8 +10,8 @@ class Vector:
         self.dummy = []
         self.actualcoord = []
         for varnum in range(nvar):
-            self.dummy.append(symbols(name + '_' + str(varnum)))
-            self.actualcoord.append(symbols(name + '_' + str(varnum)))
+            self.dummy.append(symbols(name + str(varnum)))
+            self.actualcoord.append(symbols(name + str(varnum)))
         self.dummy = Matrix(self.dummy)
         self.conj = self.conjugatevector(self.dummy)
     class conjugatevector:
@@ -140,6 +140,6 @@ def write_vector(vector, file):
     '''This function saves the coordinates of a vector into a text file'''
     for varnum in range(nvar):
         if varnum<nvar - 1:
-            file.write(latex(vector.actualcoord[varnum]) + ',')
+            file.write(mathematica_code(vector.actualcoord[varnum]) + ',')
         else:
-            file.write(latex(vector.actualcoord[varnum]) + '\n')
+            file.write(mathematica_code(vector.actualcoord[varnum]) + '\n')

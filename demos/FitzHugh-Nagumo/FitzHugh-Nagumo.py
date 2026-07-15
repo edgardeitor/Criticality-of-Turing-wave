@@ -1,8 +1,8 @@
-parameters={"a_2": 0.4497,
-        "a_3": 0.5,
-        "a_0": -0.1,
-        "epsilon_2": 0.2,
-        "epsilon_3": 1,
+parameters={"a2": 0.4497,
+        "a3": 0.5,
+        "a0": -0.1,
+        "epsilon2": 0.2,
+        "epsilon3": 1,
         "D1": 0.005,
         "D2": 0,
         "D3": 1}
@@ -15,9 +15,9 @@ diffmatrix=[['D1', 0, 0],
             [0, 'D2', 0],
             [0, 0, 'D3']]
 
-kinetics=["u-u**3-v",
-        "epsilon_2*(u-a_2*v-a_3*w-a_0)",
-        "epsilon_3*(u-w)"]
+kinetics=["u - u**3 - v",
+        "epsilon2*(u - a2*v - a3*w - a0)",
+        "epsilon3*(u - w)"]
 
 tol=1e-7
 
@@ -25,7 +25,7 @@ phiunit='n'
 
 crosscoef='y'
 
-crosspar='a_2'
+crosspar='a2'
 
 equilibrium=[]
 
@@ -37,13 +37,13 @@ cod2='y'
 
 plot2d='y'
 
-parameters_on_axes=['a_2','D2']
+parameters_on_axes=['a2', 'D2']
 
-names_of_parameters=['a_v','D_2']
+names_of_parameters=['a_v', 'D_2']
 
-intervalx=[0.4,0.6]
+intervalx = [0.42, 0.436]
 
-intervaly=[0,1]
+intervaly = [0, 0.3]
 
 lines_to_search={'D2':0.2}
 

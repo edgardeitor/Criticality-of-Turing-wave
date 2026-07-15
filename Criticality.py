@@ -6,6 +6,7 @@ import shutil
 import math
 from sys import exit
 from sympy import *
+from sympy.printing.mathematica import mathematica_code
 init_printing()
 from sympy.solvers import solve
 from mpmath import findroot
@@ -48,7 +49,9 @@ for varnum in range(nvar):
     except:
         print('The script could not define your variable ' + (var[varnum]) + ' as a variable')
         exit()
-    file.write(latex(var[varnum]) + '\n')
+    file.write(mathematica_code(var[varnum]) + '\n')
+
+file.close()
     
 try:
     parameters
@@ -104,7 +107,7 @@ kinetics = Matrix(kinetics)
 
 file = open('Kinetics.txt','w')
 for functionnumber in range(nvar):
-    file.write(latex(kinetics[functionnumber]) + '\n')
+    file.write(mathematica_code(kinetics[functionnumber]) + '\n')
 file.close()
 
 jacobianmat = kinetics.jacobian(var)
@@ -161,8 +164,8 @@ elif isinstance(eq,list) and len(eq)==1:
 
 # Wave conditions
 
-muNF = symbols('mu_NF', real = True)
-omegaNF = symbols('omega_NF', real = True)
+muNF = symbols('muNF', real = True)
+omegaNF = symbols('omegaNF', real = True)
 
 dummyrealpart = symbols('dummyrealpart', real = True)
 
@@ -343,16 +346,16 @@ ksquared = 0
 omegaval = 0
     
 file = open('Real part of the determinant of the Jacobian matrix.txt','w')
-file.write(latex(realdeterminant))
+file.write(mathematica_code(realdeterminant))
 file.close()
 file = open('Imaginary part of the determinant of the Jacobian matrix.txt','w')
-file.write(latex(imagdeterminant))
+file.write(mathematica_code(imagdeterminant))
 file.close()
 file = open('Real part of the derivative of the Determinant.txt','w')
-file.write(latex(realdeterminantderivative))
+file.write(mathematica_code(realdeterminantderivative))
 file.close()
 file = open("Non-zero variable.txt",'w')
-file.write(latex(auxiliaryterm))
+file.write(mathematica_code(auxiliaryterm))
 file.close()
 
 # Normal form
@@ -515,19 +518,19 @@ if crosscoef=='y':
         # file = open('Kernels.txt', 'w')
         # for varnum in range(nvar):
         #     if varnum<nvar - 1:
-        #         file.write(latex(phi11NF.actualcoord[varnum]) + ',')
+        #         file.write(mathematica_code(phi11NF.actualcoord[varnum]) + ',')
         #     else:
-        #         file.write(latex(phi11NF.actualcoord[varnum]) + '\n')
+        #         file.write(mathematica_code(phi11NF.actualcoord[varnum]) + '\n')
         # for varnum in range(nvar):
         #     if varnum<nvar - 1:
-        #         file.write(latex(psi11NF.actualcoord[varnum]) + ',')
+        #         file.write(mathematica_code(psi11NF.actualcoord[varnum]) + ',')
         #     else:
-        #         file.write(latex(psi11NF.actualcoord[varnum]))
+        #         file.write(mathematica_code(psi11NF.actualcoord[varnum]))
         # file.close()
 
         file = open('To get cross-order coefficient.txt', 'w')
-        file.write(latex(crosspar) + '\n')
-        file.write(latex(pre_C11))
+        file.write(mathematica_code(crosspar) + '\n')
+        file.write(mathematica_code(pre_C11))
         file.close()
     except:
         print('The parameter crosspar is not a parameter of the system.')
@@ -790,32 +793,16 @@ if fifthcoef=='y':
                                       Mul(60, Q5S_phi11phi11phi11conjphi11conjphi11))))
     
     print('The calculation of the fifth-order coefficients was carried out successfully.')
-    
-# C130 = C130.subs(W02NF_eval)
-# C130 = C130.subs(W22NF_eval)
-# C130 = C130.subs(W011NF_eval)
-# C130 = C130.subs(W211NF_eval)
-
-# C112 = C112.subs(W02NF_eval)
-# C112 = C112.subs(W22NF_eval)
-# C112 = C112.subs(W011NF_eval)
-# C112 = C112.subs(W211NF_eval)
-
-# C130 = C130.subs(phi11NF_eval)
-# C130 = C130.subs(psi11NF_eval)
-
-# C112 = C112.subs(phi11NF_eval)
-# C112 = C112.subs(psi11NF_eval)
 
 C130 = simplify(C130)
 C112 = simplify(C112)
     
 file = open('Third-order coefficient C130.txt', 'w')
-file.write(latex(C130))
+file.write(mathematica_code(C130))
 file.close()
 
 file = open('Third-order coefficient C112.txt', 'w')
-file.write(latex(C112))
+file.write(mathematica_code(C112))
 file.close()
 
 file = open('Vectors.txt', 'w')
@@ -848,77 +835,14 @@ elif fifthcoef=='y':
     
     file.close()
     
-    # C150 = C150.subs(W04NF_eval)
-    # C150 = C150.subs(W24NF_eval)
-    # C150 = C150.subs(W031NF_eval)
-    # C150 = C150.subs(W231NF_eval)
-    # C150 = C150.subs(W022NF_eval)
-    # C150 = C150.subs(W222NF_eval)
-    
-    # C114 = C114.subs(W04NF_eval)
-    # C114 = C114.subs(W24NF_eval)
-    # C114 = C114.subs(W031NF_eval)
-    # C114 = C114.subs(W231NF_eval)
-    # C114 = C114.subs(W022NF_eval)
-    # C114 = C114.subs(W222NF_eval)
-    
-    # C132 = C132.subs(W04NF_eval)
-    # C132 = C132.subs(W24NF_eval)
-    # C132 = C132.subs(W031NF_eval)
-    # C132 = C132.subs(W231NF_eval)
-    # C132 = C132.subs(W022NF_eval)
-    # C132 = C132.subs(W222NF_eval)
-    
-    # C150 = C150.subs(W13NF_eval)
-    # C150 = C150.subs(W33NF_eval)
-    # C150 = C150.subs(W121NF_eval)
-    # C150 = C150.subs(W1221NF_eval)
-    # C150 = C150.subs(W321NF_eval)
-    
-    # C114 = C114.subs(W13NF_eval)
-    # C114 = C114.subs(W33NF_eval)
-    # C114 = C114.subs(W121NF_eval)
-    # C114 = C114.subs(W1221NF_eval)
-    # C114 = C114.subs(W321NF_eval)
-    
-    # C132 = C132.subs(W13NF_eval)
-    # C132 = C132.subs(W33NF_eval)
-    # C132 = C132.subs(W121NF_eval)
-    # C132 = C132.subs(W1221NF_eval)
-    # C132 = C132.subs(W321NF_eval)
-    
-    # C150 = C150.subs(W02NF_eval)
-    # C150 = C150.subs(W22NF_eval)
-    # C150 = C150.subs(W011NF_eval)
-    # C150 = C150.subs(W211NF_eval)
-    
-    # C114 = C114.subs(W02NF_eval)
-    # C114 = C114.subs(W22NF_eval)
-    # C114 = C114.subs(W011NF_eval)
-    # C114 = C114.subs(W211NF_eval)
-    
-    # C132 = C132.subs(W02NF_eval)
-    # C132 = C132.subs(W22NF_eval)
-    # C132 = C132.subs(W011NF_eval)
-    # C132 = C132.subs(W211NF_eval)
-    
-    # C150 = C150.subs(phi11NF_eval)
-    # C150 = C150.subs(psi11NF_eval)
-    
-    # C114 = C114.subs(phi11NF_eval)
-    # C114 = C114.subs(psi11NF_eval)
-    
-    # C132 = C132.subs(phi11NF_eval)
-    # C132 = C132.subs(psi11NF_eval)
-    
     file = open('Fifth-order coefficient C150.txt','w')
-    file.write(latex(C150))
+    file.write(mathematica_code(C150))
     file.close()
     file = open('Fifth-order coefficient C114.txt','w')
-    file.write(latex(C114))
+    file.write(mathematica_code(C114))
     file.close()
     file = open('Fifth-order coefficient C132.txt','w')
-    file.write(latex(C132))
+    file.write(mathematica_code(C132))
     file.close()
     
     print('The fifth-order coefficients were computed and saved into text files.')
@@ -942,11 +866,11 @@ if plot2d=='y':
             if isinstance(lines_to_search[key],list):
                 for initialsolnum in range(len(lines_to_search[key])):
                     if isfloat(str(lines_to_search[key][initialsolnum])):
-                        file.write(latex(eval(key)) + ',' + 
-                                   latex(eval(str(lines_to_search[key][initialsolnum]))) + '\n')
+                        file.write(mathematica_code(eval(key)) + ',' + 
+                                   mathematica_code(eval(str(lines_to_search[key][initialsolnum]))) + '\n')
             else:
                 if isfloat(str(lines_to_search[key])):
-                    file.write(latex(eval(key)) + ',' + latex(eval(str(lines_to_search[key]))) + '\n')
+                    file.write(mathematica_code(eval(key)) + ',' + mathematica_code(eval(str(lines_to_search[key]))) + '\n')
                 
         file.close()    
     except:
@@ -966,27 +890,27 @@ if plot2d=='y':
     for key in parameters.keys():
         if key not in parameters_on_axes:
             if key not in parameter_functions.keys():
-                file.write(latex(key) + ',' + latex(parameters[key]) + '\n')
+                file.write(mathematica_code(key) + ',' + mathematica_code(parameters[key]) + '\n')
             else:
-                file.write(latex(key) + ',' + latex(parameter_functions[key]) + '\n')
+                file.write(mathematica_code(key) + ',' + mathematica_code(parameter_functions[key]) + '\n')
             
     file.close()
         
     file = open('Parameters on axes.txt','w')
-    file.write(latex(parameters_on_axes[0]) + ',' + latex(intervalx[0]) + ',' + latex(intervalx[1]) + '\n')
-    file.write(latex(parameters_on_axes[1]) + ',' + latex(intervaly[0]) + ',' + latex(intervaly[1]) + '\n')
+    file.write(mathematica_code(parameters_on_axes[0]) + ',' + mathematica_code(intervalx[0]) + ',' + mathematica_code(intervalx[1]) + '\n')
+    file.write(mathematica_code(parameters_on_axes[1]) + ',' + mathematica_code(intervaly[0]) + ',' + mathematica_code(intervaly[1]) + '\n')
     file.close()
 
     try:
         if len(names_of_parameters)==0:
             for parnum in range(2):
-                names_of_parameters[parnum] = latex(parameters_on_axes[parnum])
+                names_of_parameters[parnum] = mathematica_code(parameters_on_axes[parnum])
     except:
         names_of_parameters = parameters_on_axes
         for parnum in range(2):
-            names_of_parameters[parnum] = latex(names_of_parameters[parnum])
+            names_of_parameters[parnum] = mathematica_code(names_of_parameters[parnum])
         
-    file = open('Actual names of parameters.txt','w')
+    file = open('Actual names of parameters.txt', 'w')
     file.write(names_of_parameters[0] + ',' + names_of_parameters[1])
     file.close()
     

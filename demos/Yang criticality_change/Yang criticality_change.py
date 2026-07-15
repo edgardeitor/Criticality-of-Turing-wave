@@ -14,9 +14,9 @@ diffmatrix=[['D1', 0, 0],
             [0, 'D2', 0],
             [0, 0, 'D3']]
 
-kinetics=["k1+2*u-u**3-k3*v-k4*w",
-        "(u-v)/tau",
-        "u-w"]
+kinetics=["k1 + 2*u - u**3 - k3*v - k4*w",
+        "(u - v)/tau",
+        "u - w"]
 
 tol=1e-7
 
@@ -36,9 +36,9 @@ cod2='y'
 
 plot2d='y'
 
-parameters_on_axes=['k1','k3']
+parameters_on_axes=['k1', 'k3']
 
-names_of_parameters=['k_0','k_v']
+names_of_parameters=['k_0', 'k_v']
 
 intervalx=[-8,-1]
 
