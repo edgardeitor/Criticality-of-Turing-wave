@@ -1,4 +1,7 @@
 # Criticality-of-Turing-wave
+
+Villar-Sepúlveda, E., & Champneys, A. (2024). Amplitude equations for wave bifurcations in reaction–diffusion systems. Nonlinearity, 37(8), 085012.
+
 This code is a general version of the code to compute the criticality of the Turing-wave bifurcation for both, travelling and standing waves.
 
 To run the code, you must place the files 'Criticality.py', 'functions.py', and 'Plotter.nb' in the same folder, together with different folders for the models you want to study (one folder per model). The folder can be named in any way. Inside that folder, there must be a Python file 'foo.py', where 'foo' is the same name as the folder. That Python file must have the model and some standard constants to run the code. To run the code, you just need to run the file 'Criticality.py' and provide the name of the folder in which your model is stored (there will be a prompt asking for this input).
